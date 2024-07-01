@@ -54,6 +54,7 @@ final class TrackerViewController: UIViewController {
         configureNavigationBar()
         addSearchTextField()
         addErrorImageViewAndLabel()
+        setupTapGesture()
     }
     
     private func configureBackground() {
@@ -104,6 +105,15 @@ final class TrackerViewController: UIViewController {
                 self.errorImageView.centerYAnchor.constraint(equalTo: self.view.topAnchor, constant: midPoint)
             ])
         }
+    }
+    
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     @objc private func leftButtonTapped() {
