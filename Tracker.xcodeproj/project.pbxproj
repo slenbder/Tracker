@@ -11,6 +11,7 @@
 		4FDF8E852C302E8F00897652 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF8E842C302E8F00897652 /* StatsViewController.swift */; };
 		4FDF8E872C304D2E00897652 /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF8E862C304D2E00897652 /* YS Display-Medium.ttf */; };
 		4FDF8E892C304F2E00897652 /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF8E882C304F2E00897652 /* YS Display-Bold.ttf */; };
+		4FDF8EC92C33012300897652 /* CreateTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF8EC82C33012300897652 /* CreateTrackerViewController.swift */; };
 		4FE37B072C2EFDC70080C748 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE37B062C2EFDC70080C748 /* AppDelegate.swift */; };
 		4FE37B092C2EFDC70080C748 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE37B082C2EFDC70080C748 /* SceneDelegate.swift */; };
 		4FE37B0B2C2EFDC70080C748 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE37B0A2C2EFDC70080C748 /* TabBarViewController.swift */; };
@@ -43,6 +44,7 @@
 		4FDF8E842C302E8F00897652 /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		4FDF8E862C304D2E00897652 /* YS Display-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Medium.ttf"; sourceTree = "<group>"; };
 		4FDF8E882C304F2E00897652 /* YS Display-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Bold.ttf"; sourceTree = "<group>"; };
+		4FDF8EC82C33012300897652 /* CreateTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTrackerViewController.swift; sourceTree = "<group>"; };
 		4FE37B032C2EFDC70080C748 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FE37B062C2EFDC70080C748 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4FE37B082C2EFDC70080C748 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				4FE37B082C2EFDC70080C748 /* SceneDelegate.swift */,
 				4FE37B0A2C2EFDC70080C748 /* TabBarViewController.swift */,
 				4FDF8E822C302DE900897652 /* TrackerViewController.swift */,
+				4FDF8EC82C33012300897652 /* CreateTrackerViewController.swift */,
 				4FDF8E842C302E8F00897652 /* StatsViewController.swift */,
 				4FE37B0F2C2EFDC80080C748 /* Assets.xcassets */,
 				4FE37B112C2EFDC80080C748 /* LaunchScreen.storyboard */,
@@ -271,6 +274,7 @@
 				4FE37B0B2C2EFDC70080C748 /* TabBarViewController.swift in Sources */,
 				4FDF8E832C302DE900897652 /* TrackerViewController.swift in Sources */,
 				4FE37B072C2EFDC70080C748 /* AppDelegate.swift in Sources */,
+				4FDF8EC92C33012300897652 /* CreateTrackerViewController.swift in Sources */,
 				4FDF8E852C302E8F00897652 /* StatsViewController.swift in Sources */,
 				4FE37B092C2EFDC70080C748 /* SceneDelegate.swift in Sources */,
 			);

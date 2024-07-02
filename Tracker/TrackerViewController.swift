@@ -67,7 +67,7 @@ final class TrackerViewController: UIViewController {
         navigationBar.prefersLargeTitles = true
         navigationBar.topItem?.largeTitleDisplayMode = .always
         
-        let plusButton = UIBarButtonItem(image: UIImage(named: "tabbarplusbutton"), style: .plain, target: self, action: #selector(leftButtonTapped))
+        let plusButton = UIBarButtonItem(image: UIImage(named: "tabbarplusbutton"), style: .plain, target: self, action: #selector(plusButtonTapped))
         plusButton.tintColor = .black
         navigationItem.leftBarButtonItem = plusButton
         
@@ -116,7 +116,9 @@ final class TrackerViewController: UIViewController {
         view.endEditing(true)
     }
     
-    @objc private func leftButtonTapped() {
-        // Действие при нажатии на кнопку
+    @objc private func plusButtonTapped() {
+        let createTrackerVC = CreateTrackerViewController()
+        createTrackerVC.modalPresentationStyle = .pageSheet
+        present(createTrackerVC, animated: true, completion: nil)
     }
 }
