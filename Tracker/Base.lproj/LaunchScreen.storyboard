@@ -22,7 +22,7 @@
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" name="Blue"/>
+                        <color key="backgroundColor" name="AccentColor"/>
                         <constraints>
                             <constraint firstItem="E1U-Ej-nJj" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="1c2-vc-aZw"/>
                             <constraint firstItem="E1U-Ej-nJj" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="3s5-Hu-JCw"/>
@@ -36,8 +36,8 @@
     </scenes>
     <resources>
         <image name="Logo" width="91" height="94"/>
-        <namedColor name="Blue">
-            <color red="0.21568627450980393" green="0.44705882352941173" blue="0.90588235294117647" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

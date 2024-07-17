@@ -1,8 +1,8 @@
 //
-//  ViewController.swift
+//  TabBarViewController.swift
 //  Tracker
 //
-//  Created by Кирилл Марьясов on 28.06.2024.
+//  Created by Кирилл Марьясов on 17.07.2024.
 //
 
 import UIKit
@@ -22,7 +22,7 @@ final class TabBarViewController: UITabBarController {
         let statsViewController = StatsViewController()
         statsViewController.tabBarItem = UITabBarItem(
             title: "Статистика",
-            image: UIImage(named: "stats_active"),
+            image: UIImage(named: "statistics_active"),
             selectedImage: nil
         )
         
