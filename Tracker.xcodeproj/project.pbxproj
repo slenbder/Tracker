@@ -196,6 +196,20 @@
 			path = CoreData;
 			sourceTree = "<group>";
 		};
+		4FCA65BA2C8364DA009DCCB8 /* Tracker */ = {
+			isa = PBXGroup;
+			children = (
+				4FE37B142C2EFDC80080C748 /* Info.plist */,
+				4F7647A42C8328B000E77313 /* Tracker.xcdatamodeld */,
+				4FE37B062C2EFDC70080C748 /* AppDelegate.swift */,
+				4FE37B082C2EFDC70080C748 /* SceneDelegate.swift */,
+				4F72616A2C482FA8004594B6 /* TabBarViewController.swift */,
+				4FE37B0F2C2EFDC80080C748 /* Assets.xcassets */,
+				4FE37B112C2EFDC80080C748 /* LaunchScreen.storyboard */,
+			);
+			path = Tracker;
+			sourceTree = "<group>";
+		};
 		4FE37AFA2C2EFDC70080C748 = {
 			isa = PBXGroup;
 			children = (
@@ -205,15 +219,9 @@
 				4F7261462C48035D004594B6 /* CreateNewHabit */,
 				4F7261472C480389004594B6 /* CreateNewTracker */,
 				4F7261452C480350004594B6 /* StatsViewController */,
+				4FCA65BA2C8364DA009DCCB8 /* Tracker */,
 				4F7261482C48039A004594B6 /* TrackerModels */,
 				4F7261442C48033E004594B6 /* TrackerViewController */,
-				4FE37B062C2EFDC70080C748 /* AppDelegate.swift */,
-				4FE37B082C2EFDC70080C748 /* SceneDelegate.swift */,
-				4F72616A2C482FA8004594B6 /* TabBarViewController.swift */,
-				4FE37B0F2C2EFDC80080C748 /* Assets.xcassets */,
-				4FE37B112C2EFDC80080C748 /* LaunchScreen.storyboard */,
-				4F7647A42C8328B000E77313 /* Tracker.xcdatamodeld */,
-				4FE37B142C2EFDC80080C748 /* Info.plist */,
 				4FE37B1C2C2EFDC80080C748 /* TrackerTests */,
 				4FE37B262C2EFDC80080C748 /* TrackerUITests */,
 				4FE37B042C2EFDC70080C748 /* Products */,
@@ -769,8 +777,7 @@
 				4F7647A52C8328B000E77313 /* Tracker.xcdatamodel */,
 			);
 			currentVersion = 4F7647A52C8328B000E77313 /* Tracker.xcdatamodel */;
-			name = Tracker.xcdatamodeld;
-			path = "/Users/kira/Documents/Учёба/Проекты/Учебные проекты/Tracker/Tracker/Tracker.xcdatamodeld";
+			path = Tracker.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

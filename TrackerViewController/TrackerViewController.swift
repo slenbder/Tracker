@@ -220,7 +220,7 @@ final class TrackerViewController: UIViewController{
         imageMock.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageMock)
         
-        imageMock.image = UIImage(named: "starMock")
+        imageMock.image = UIImage(named: "tracker_error")
         imageMock.contentMode = .scaleAspectFill
         
         NSLayoutConstraint.activate([
@@ -289,7 +289,7 @@ final class TrackerViewController: UIViewController{
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCollectionViewCell")
-        collectionView.register(TrackerHeaderView.self,forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "TrackersHeaderReusableView")
+        collectionView.register(TrackerHeaderView.self,forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "TrackerHeaderView")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .clear
         view.addSubview(collectionView)

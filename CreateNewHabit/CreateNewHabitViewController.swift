@@ -152,15 +152,17 @@ class CreateNewHabitViewController: UIViewController, ScheduleViewControllerDele
     }
     
     let emojiData = ["😊", "😍", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🤖", "🤔", "🙏", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😴"]
-    let colorData: [UIColor] = {
-        var colors = [UIColor]()
-        for i in 1...18 {
-            if let color = UIColor(named: "CSelection\(i)") {
-                colors.append(color)
-            }
-        }
-        return colors
-    }()
+    
+    let colorData = [UIColor.cSelection1, UIColor.cSelection2, UIColor.cSelection3, UIColor.cSelection4, UIColor.cSelection5, UIColor.cSelection6, UIColor.cSelection7, UIColor.cSelection8, UIColor.cSelection9, UIColor.cSelection10, UIColor.cSelection11, UIColor.cSelection12, UIColor.cSelection13, UIColor.cSelection14, UIColor.cSelection15, UIColor.cSelection16, UIColor.cSelection17, UIColor.cSelection18]
+//    let colorData: [UIColor] = {
+//        var colors = [UIColor]()
+//        for i in 1...18 {
+//            if let color = UIColor(named: "CSelection\(i)") {
+//                colors.append(color)
+//            }
+//        }
+//        return colors
+//    }()
     
     // MARK: - Setup UI
     private func setUpView() {
