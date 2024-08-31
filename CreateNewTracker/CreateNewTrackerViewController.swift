@@ -11,7 +11,7 @@ protocol CreateTrackerDelegate: AnyObject{
     func didCreateNewTracker(_ tracker: Tracker)
 }
 
-final class CreateNewTrackerViewController: UIViewController{
+final class CreateTrackerViewController: UIViewController{
     
     weak var delegate: CreateTrackerDelegate?
     
@@ -25,7 +25,7 @@ final class CreateNewTrackerViewController: UIViewController{
     }
     
     private func setUpView() {
-        view.backgroundColor = .ypWhite
+        view.backgroundColor = .white
         setUpLabel()
         setUpButtons()
     }
@@ -33,7 +33,7 @@ final class CreateNewTrackerViewController: UIViewController{
     private func setUpLabel() {
         titleLabel.text = "Создание трекера"
         titleLabel.font = UIFont(name: "YSDisplay-Medium", size: 16)
-        titleLabel.textColor = .ypBlack
+        titleLabel.textColor = .black
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -49,19 +49,19 @@ final class CreateNewTrackerViewController: UIViewController{
     private func setUpButtons() {
         habitButton.setTitle("Привычка", for: .normal)
         habitButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 16)
-        habitButton.titleLabel?.textColor = .ypWhite
+        habitButton.titleLabel?.textColor = .white
         habitButton.titleLabel?.textAlignment = .center
-        habitButton.backgroundColor = .ypBlack
+        habitButton.backgroundColor = .black
         habitButton.layer.cornerRadius = 15
         habitButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(habitButton)
         
         irregularEventButton.setTitle("Нерегулярное событие", for: .normal)
         irregularEventButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 16)
-        irregularEventButton.titleLabel?.textColor = .ypWhite
+        irregularEventButton.titleLabel?.textColor = .white
         irregularEventButton.titleLabel?.textAlignment = .center
-        irregularEventButton.backgroundColor = .ypBlack
-        irregularEventButton.tintColor = .ypWhite
+        irregularEventButton.backgroundColor = .black
+        irregularEventButton.tintColor = .white
         irregularEventButton.layer.cornerRadius = 15
         irregularEventButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(irregularEventButton)
@@ -85,20 +85,20 @@ final class CreateNewTrackerViewController: UIViewController{
     }
     
     @objc  func didTapHabitButton() {
-        let newVC = NewHabitViewController()
+        let newVC = NewHabitVC()
         newVC.delegate = self
         newVC.modalPresentationStyle = .popover
         present(newVC, animated: true, completion: nil)
     }
     
     @objc  func didTapIrregularEventButton() {
-        let newVC = CreateNewEventViewController()
+        let newVC = CreateNewIrregularEventViewController()
         newVC.modalPresentationStyle = .popover
         present(newVC, animated: true, completion: nil)
     }
 }
 
-extension CreateNewTrackerViewController: NewHabitViewControllerDelegate{
+extension CreateTrackerViewController: NewHabitViewControllerDelegate{
     func didCreateNewHabit(_ tracker: Tracker) {
         delegate?.didCreateNewTracker(tracker)
     }

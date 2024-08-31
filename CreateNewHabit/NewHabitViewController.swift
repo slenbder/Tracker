@@ -35,7 +35,7 @@ class NewHabitViewController: UIViewController, ScheduleViewControllerDelegate {
     
     private let nameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "    Введите название трекера"
+        textField.placeholder = "  Введите название трекера"
         textField.font = UIFont(name: "YSDisplay-Medium", size: 17)
         textField.backgroundColor = .ypBackground
         textField.layer.cornerRadius = 10
@@ -95,11 +95,11 @@ class NewHabitViewController: UIViewController, ScheduleViewControllerDelegate {
         tableView.delegate = self
         setUpView()
     }
-    
+
     // MARK: - Setup UI
     private func setUpView() {
         view.backgroundColor = .ypWhite
-        
+       
         view.addSubview(titleLabel)
         view.addSubview(nameTextField)
         view.addSubview(cancelButton)
@@ -145,7 +145,7 @@ class NewHabitViewController: UIViewController, ScheduleViewControllerDelegate {
     
     @objc private func createButtonTapped() {
         guard let trackerTitle = nameTextField.text else {return}
-        let newTracker = Tracker(id: UUID(), title: trackerTitle, color: .cSelection10, emoji: "😴", schedule: selectedDays)
+        let newTracker = Tracker(id: UUID(), title: trackerTitle, color: .cSelection13, emoji: "🫥", schedule: selectedDays)
         delegate?.didCreateNewHabit(newTracker)
         dismiss(animated: true)
     }

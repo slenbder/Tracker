@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TrackerHeaderView: UICollectionReusableView{
+class TrackersHeaderReusableView: UICollectionReusableView{
     let titleLabel = UILabel()
     
     override init(frame: CGRect) {
@@ -20,8 +20,8 @@ class TrackerHeaderView: UICollectionReusableView{
     }
     
     func setUpTitle() {
-        titleLabel.font = UIFont(name: "YSDisplay-Medium", size: 19)
-        titleLabel.textColor = .ypBlack
+        titleLabel.font = UIFont(name: "YSDisplay-Bold", size: 19)
+        titleLabel.textColor = .black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(titleLabel)
         

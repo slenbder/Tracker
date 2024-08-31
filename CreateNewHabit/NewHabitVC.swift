@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CreateNewHabitViewController: UIViewController, ScheduleViewControllerDelegate {
+class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
     
     weak var scheduleViewControllerDelegate: ScheduleViewControllerDelegate?
     weak var delegate: NewHabitViewControllerDelegate?
@@ -52,9 +52,9 @@ class CreateNewHabitViewController: UIViewController, ScheduleViewControllerDele
     
     private var nameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "    Введите название трекера"
+        textField.placeholder = "  Введите название трекера"
         textField.font = UIFont(name: "YSDisplay-Medium", size: 17)
-        textField.backgroundColor = UIColor(named: "TextFieldColor")
+        textField.backgroundColor = .ypBackground
         textField.layer.cornerRadius = 10
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
@@ -119,9 +119,9 @@ class CreateNewHabitViewController: UIViewController, ScheduleViewControllerDele
     private let cancelButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Отменить", for: .normal)
-        button.setTitleColor(.red, for: .normal)
+        button.setTitleColor(.ypRed, for: .normal)
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.red.cgColor
+        button.layer.borderColor = UIColor.ypRed.cgColor
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -131,7 +131,7 @@ class CreateNewHabitViewController: UIViewController, ScheduleViewControllerDele
         let button = UIButton(type: .system)
         button.setTitle("Создать", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .gray
+        button.backgroundColor = .ypGray
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -151,22 +151,21 @@ class CreateNewHabitViewController: UIViewController, ScheduleViewControllerDele
         setUpView()
     }
     
-    let emojiData = ["😊", "😍", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🤖", "🤔", "🙏", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😴"]
-    
-    let colorData = [UIColor.cSelection1, UIColor.cSelection2, UIColor.cSelection3, UIColor.cSelection4, UIColor.cSelection5, UIColor.cSelection6, UIColor.cSelection7, UIColor.cSelection8, UIColor.cSelection9, UIColor.cSelection10, UIColor.cSelection11, UIColor.cSelection12, UIColor.cSelection13, UIColor.cSelection14, UIColor.cSelection15, UIColor.cSelection16, UIColor.cSelection17, UIColor.cSelection18]
-//    let colorData: [UIColor] = {
-//        var colors = [UIColor]()
-//        for i in 1...18 {
-//            if let color = UIColor(named: "CSelection\(i)") {
-//                colors.append(color)
-//            }
-//        }
-//        return colors
-//    }()
-    
+    let emojiData = ["😊", "😊", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🤖", "🤔", "🙏", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😴"]
+    let colorData: [UIColor] = {
+        var colors = [UIColor]()
+        for i in 1...18 {
+            if let color = UIColor(named: "CSelection\(i)") {
+                colors.append(color)
+            }
+        }
+        return colors
+    }()
+
+
     // MARK: - Setup UI
     private func setUpView() {
-        view.backgroundColor = .ypWhite
+        view.backgroundColor = .white
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -296,7 +295,7 @@ class CreateNewHabitViewController: UIViewController, ScheduleViewControllerDele
             createButton.backgroundColor = .black
         } else {
             createButton.isEnabled = false
-            createButton.backgroundColor = .gray
+            createButton.backgroundColor = .ypGray
         }
     }
     
@@ -313,7 +312,7 @@ class CreateNewHabitViewController: UIViewController, ScheduleViewControllerDele
     }
 }
 
-extension CreateNewHabitViewController: UITableViewDelegate, UITableViewDataSource {
+extension NewHabitVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
@@ -322,13 +321,14 @@ extension CreateNewHabitViewController: UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 76
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         cell.textLabel?.text = habit[indexPath.row].name
         cell.detailTextLabel?.text = habit[indexPath.row].pickedSettings
         cell.textLabel?.font = UIFont(name: "YSDisplay-Medium", size: 17)
         cell.detailTextLabel?.font = UIFont(name: "YSDisplay-Medium", size: 17)
-        cell.textLabel?.textColor = .ypBlack
+        cell.textLabel?.textColor = .black
         cell.detailTextLabel?.textColor = .ypGray
         cell.backgroundColor = .clear
         cell.accessoryType = .disclosureIndicator
@@ -357,7 +357,7 @@ extension CreateNewHabitViewController: UITableViewDelegate, UITableViewDataSour
     }
 }
 
-extension CreateNewHabitViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension NewHabitVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == emojiCollectionView {

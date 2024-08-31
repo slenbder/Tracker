@@ -35,29 +35,33 @@ final class TrackerViewController: UIViewController{
     
     private func loadTrackersFromCoreData() {
       let storedTrackers = trackerStore.fetchTracker()
-      print("Loaded Trackers: \(storedTrackers)")
+      print("Loaded Trackers: \(storedTrackers)")  // Log loaded trackers
 
       let storedCategories = trackerCategoryStore.fetchAllCategories()
-      print("Loaded Categories: \(storedCategories.map { $0.title })")
+      print("Loaded Categories: \(storedCategories.map { $0.title })")  // Log loaded categories
 
+      // Загрузка выполненных трекеров из хранилища
       let storedRecords = trackerRecordStore.fetchAllRecords()
         completedTrackers = storedRecords.map { TrackerRecord(trackerId: $0.trackerId, date: $0.date) }
-      print("Loaded Completed Trackers: \(completedTrackers)")
+      print("Loaded Completed Trackers: \(completedTrackers)")  // Log loaded completed trackers
 
+      // Восстановление категорий
       if !storedCategories.isEmpty {
           categories = storedCategories.compactMap { trackerCategoryStore.decodingCategory(from: $0) }
-          print("Decoded Categories: \(categories)")
+          print("Decoded Categories: \(categories)")  // Log decoded categories
       } else {
-            
+            // Если категории пусты, создаем категорию на основе первой трекера
           if let firstCategory = categories.first {
             let updatedCategory = TrackerCategory(title: firstCategory.title, trackers: storedTrackers)
             categories[0] = updatedCategory
             }
         }
 
+        // Устанавливаем видимую категорию и отображаем трекеры для текущей даты
         visibleTrackers = categories
         filterTrackersForCurrentDay()
 
+        // Перезагружаем collectionView для отображения данных
         collectionView.reloadData()
     }
     
@@ -119,7 +123,7 @@ final class TrackerViewController: UIViewController{
     }
     
     @objc private func addButtonTapped() {
-        let newVC = CreateNewTrackerViewController()
+        let newVC = CreateTrackerViewController()
         newVC.delegate = self
         newVC.modalPresentationStyle = .popover
         present(newVC, animated: true, completion: nil)
@@ -289,7 +293,7 @@ final class TrackerViewController: UIViewController{
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCollectionViewCell")
-        collectionView.register(TrackerHeaderView.self,forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "TrackerHeaderView")
+        collectionView.register(TrackersHeaderReusableView.self,forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "TrackersHeaderReusableView")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .clear
         view.addSubview(collectionView)
@@ -375,7 +379,7 @@ extension TrackerViewController: UICollectionViewDataSource, UICollectionViewDel
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind{
         case UICollectionView.elementKindSectionHeader:
-            guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "TrackerHeaderView", for: indexPath) as? TrackerHeaderView else {
+            guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "TrackersHeaderReusableView", for: indexPath) as? TrackersHeaderReusableView else {
                 return UICollectionReusableView()
             }
             view.titleLabel.text = visibleTrackers[indexPath.section].title

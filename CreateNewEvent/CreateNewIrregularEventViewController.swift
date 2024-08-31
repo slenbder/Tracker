@@ -7,8 +7,8 @@
 
 import UIKit
 
-class CreateNewEventViewController: UIViewController {
-    
+class CreateNewIrregularEventViewController: UIViewController {
+
     // MARK: - UI Elements
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -21,7 +21,7 @@ class CreateNewEventViewController: UIViewController {
     
     private let nameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = "  Введите название трекера"
         textField.font = UIFont(name: "YSDisplay-Medium", size: 17)
         textField.backgroundColor = .ypBackground
         textField.layer.cornerRadius = 10
@@ -44,9 +44,9 @@ class CreateNewEventViewController: UIViewController {
     private let cancelButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Отменить", for: .normal)
-        button.setTitleColor(.ypRed, for: .normal)
+        button.setTitleColor(.red, for: .normal)
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.ypRed.cgColor
+        button.layer.borderColor = UIColor.red.cgColor
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -55,8 +55,8 @@ class CreateNewEventViewController: UIViewController {
     private let createButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Создать", for: .normal)
-        button.setTitleColor(.ypWhite, for: .normal)
-        button.backgroundColor = .ypGray
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .gray
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -69,10 +69,10 @@ class CreateNewEventViewController: UIViewController {
         tableView.delegate = self
         setUpView()
     }
-    
+
     // MARK: - Setup UI
     private func setUpView() {
-        view.backgroundColor = .ypWhite
+        view.backgroundColor = .white
         
         view.addSubview(titleLabel)
         view.addSubview(nameTextField)
@@ -117,7 +117,7 @@ class CreateNewEventViewController: UIViewController {
     private func navigateToCategory() {}
 }
 
-extension CreateNewEventViewController: UITableViewDelegate, UITableViewDataSource {
+extension CreateNewIrregularEventViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
@@ -133,7 +133,7 @@ extension CreateNewEventViewController: UITableViewDelegate, UITableViewDataSour
             cell.textLabel?.text = "Категория"
         }
         cell.textLabel?.font = UIFont(name: "YSDisplay-Medium", size: 17)
-        cell.textLabel?.textColor = .ypBlack
+        cell.textLabel?.textColor = .black
         cell.backgroundColor = .clear
         cell.accessoryType = .disclosureIndicator
         return cell

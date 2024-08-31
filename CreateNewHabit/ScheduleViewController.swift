@@ -19,7 +19,7 @@ class ScheduleViewController: UIViewController {
     
     weak var delegate: ScheduleViewControllerDelegate?
     private var selectedWeekDays: Set<DayOfWeek> = []
-    
+
     // MARK: - UI Elements
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -66,7 +66,7 @@ class ScheduleViewController: UIViewController {
         selectedWeekDays.removeAll()
         print("SelectedWeekDays array cleared!")
     }
-    
+
     // MARK: - Setup UI
     private func setUpView() {
         view.backgroundColor = .ypWhite
@@ -229,8 +229,7 @@ class SwitchTableViewCell: UITableViewCell {
             separatorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-    
-    
+
     @objc private func switchButtonTapped(_ sender: UISwitch) {
         guard let weekDay = weekDay else { return }
         delegate?.switchButtonClicked(to: sender.isOn, of: weekDay)

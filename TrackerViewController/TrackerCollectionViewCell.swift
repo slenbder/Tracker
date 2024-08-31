@@ -47,7 +47,7 @@ class TrackerCollectionViewCell: UICollectionViewCell {
         ])
         
         backgroundEmojiView.layer.cornerRadius = 12
-        backgroundEmojiView.backgroundColor = .ypWhite.withAlphaComponent(0.3)
+        backgroundEmojiView.backgroundColor = .white.withAlphaComponent(0.3)
         backgroundEmojiView.translatesAutoresizingMaskIntoConstraints = false
         backgroundCardView.addSubview(backgroundEmojiView)
         
@@ -68,7 +68,7 @@ class TrackerCollectionViewCell: UICollectionViewCell {
         ])
         
         titleLabel.font = UIFont(name: "YSDisplay-Medium", size: 12)
-        titleLabel.textColor = .ypWhite
+        titleLabel.textColor = .white
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 2
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -91,7 +91,7 @@ class TrackerCollectionViewCell: UICollectionViewCell {
         ])
         
         plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
-        plusButton.tintColor = .ypWhite
+        plusButton.tintColor = .white
         plusButton.layer.cornerRadius = 17
         plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
         plusButton.translatesAutoresizingMaskIntoConstraints = false
