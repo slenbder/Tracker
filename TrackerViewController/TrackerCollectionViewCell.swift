@@ -35,7 +35,6 @@ class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupView() {
-        
         backgroundCardView.layer.cornerRadius = 10
         backgroundCardView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(backgroundCardView)

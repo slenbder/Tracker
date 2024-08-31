@@ -7,8 +7,22 @@
 
 import UIKit
 
-class CreateNewHabitViewController: UIViewController {
+class CreateNewHabitViewController: UIViewController, ScheduleViewControllerDelegate {
     
+    weak var scheduleViewControllerDelegate: ScheduleViewControllerDelegate?
+    weak var delegate: NewHabitViewControllerDelegate?
+    var trackerVC = TrackerViewController()
+    
+    private var selectedDays: [DayOfWeek] = []
+    private var selectedEmoji: String = ""
+    private var selectedColor: UIColor = .clear
+    
+    private var habit: [(name: String, pickedSettings: String)] = [
+        (name: "Категория", pickedSettings: ""),
+        (name: "Расписание", pickedSettings: "")
+    ]
+
+    // MARK: - UI Elements
     private var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -40,10 +54,20 @@ class CreateNewHabitViewController: UIViewController {
         let textField = UITextField()
         textField.placeholder = "    Введите название трекера"
         textField.font = UIFont(name: "YSDisplay-Medium", size: 17)
-        textField.backgroundColor = .ypBackground
+        textField.backgroundColor = UIColor(named: "TextFieldColor")
         textField.layer.cornerRadius = 10
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
+    }()
+    
+    private lazy var clearTextFieldButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(named: "error_clear"), for: .normal)
+        button.frame = CGRect(x: 0, y: 0, width: 17, height: 17)
+        button.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(clearTextFieldButtonClicked), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     private var tableView: UITableView = {
@@ -95,9 +119,9 @@ class CreateNewHabitViewController: UIViewController {
     private let cancelButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Отменить", for: .normal)
-        button.setTitleColor(.ypRed, for: .normal)
+        button.setTitleColor(.red, for: .normal)
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.ypRed.cgColor
+        button.layer.borderColor = UIColor.red.cgColor
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -106,8 +130,8 @@ class CreateNewHabitViewController: UIViewController {
     private let createButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Создать", for: .normal)
-        button.setTitleColor(.ypWhite, for: .normal)
-        button.backgroundColor = .ypGray
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .gray
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -138,6 +162,7 @@ class CreateNewHabitViewController: UIViewController {
         return colors
     }()
     
+    // MARK: - Setup UI
     private func setUpView() {
         view.backgroundColor = .ypWhite
         
@@ -155,8 +180,11 @@ class CreateNewHabitViewController: UIViewController {
         backgroundView.addSubview(colorCollectionView)
         
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
+        nameTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         
         let width = (view.frame.width - 48) / 2
+        
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -174,7 +202,7 @@ class CreateNewHabitViewController: UIViewController {
             backgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             backgroundView.heightAnchor.constraint(equalToConstant: 890),
-            
+
             
             
             titleLabel.topAnchor.constraint(equalTo: backgroundView.topAnchor, constant: 20),
@@ -223,18 +251,63 @@ class CreateNewHabitViewController: UIViewController {
     }
     
     @objc private func cancelButtonTapped() {
-        dismiss(animated: true) {
-            self.presentingViewController?.dismiss(animated: true, completion: nil)
-        }
+        selectedDays.removeAll()
+        dismiss(animated: true, completion: nil)
     }
     
-    private func navigateToCategory() {
+    @objc private func createButtonTapped() {
+        print("Create button tapped")
+        guard let trackerTitle = nameTextField.text else {return}
+        let newTracker = Tracker(id: UUID(), title: trackerTitle, color: selectedColor, emoji: selectedEmoji, schedule: selectedDays)
+        trackerVC.createNewTracker(tracker: newTracker)
+        delegate?.didCreateNewHabit(newTracker)
+        dismiss(animated: true)
     }
+    
+    private func navigateToCategory() {}
     
     private func navigateToSchedule() {
         let scheduleViewController = ScheduleViewController()
+        scheduleViewController.delegate = self
+        print("Delegate set: \(scheduleViewController.delegate != nil)")
         scheduleViewController.modalPresentationStyle = .popover
         present(scheduleViewController, animated: true, completion: nil)
+    }
+    
+    @objc private func textFieldChanged(_ textField: UITextField) {
+        if let text = textField.text, !text.isEmpty {
+            clearTextFieldButton.isHidden = false
+        } else {
+            clearTextFieldButton.isHidden = true
+        }
+        checkIfCorrect()
+    }
+    
+    @objc private func clearTextFieldButtonClicked() {
+        nameTextField.text = ""
+        clearTextFieldButton.isHidden = true
+    }
+    
+    private func checkIfCorrect() {
+        if let text = nameTextField.text, !text.isEmpty && !selectedDays.isEmpty && selectedEmoji != "" && selectedColor != UIColor.clear {
+            createButton.isEnabled = true
+            createButton.backgroundColor = .black
+        } else {
+            createButton.isEnabled = false
+            createButton.backgroundColor = .gray
+        }
+    }
+    
+    func didSelectDays(_ days: [DayOfWeek]) {
+        selectedDays = days
+        print("didSelectDays called with days: \(days)")
+        let schedule = days.isEmpty ? "" : days.map { $0.shortDayName }.joined(separator: ", ")
+        habit[1].pickedSettings = schedule
+        print("Updated pickedSettings: \(habit[1].pickedSettings)")
+        tableView.reloadData()
+        dismiss(animated: true) {
+            print("NewHabitViewController dismissed")
+        }
     }
 }
 
@@ -248,14 +321,13 @@ extension CreateNewHabitViewController: UITableViewDelegate, UITableViewDataSour
         return 76
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        if indexPath.row == 0 {
-            cell.textLabel?.text = "Категория"
-        } else if indexPath.row == 1 {
-            cell.textLabel?.text = "Расписание"
-        }
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        cell.textLabel?.text = habit[indexPath.row].name
+        cell.detailTextLabel?.text = habit[indexPath.row].pickedSettings
         cell.textLabel?.font = UIFont(name: "YSDisplay-Medium", size: 17)
+        cell.detailTextLabel?.font = UIFont(name: "YSDisplay-Medium", size: 17)
         cell.textLabel?.textColor = .ypBlack
+        cell.detailTextLabel?.textColor = .ypGray
         cell.backgroundColor = .clear
         cell.accessoryType = .disclosureIndicator
         return cell
@@ -267,6 +339,19 @@ extension CreateNewHabitViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return UIView(frame: .zero)
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0:
+            navigateToCategory()
+        case 1:
+            navigateToSchedule()
+        default:
+            break
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+        checkIfCorrect()
     }
 }
 
@@ -288,7 +373,7 @@ extension CreateNewHabitViewController: UICollectionViewDelegate, UICollectionVi
             return cell
         } else if collectionView == colorCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.reuseIdentifier, for: indexPath) as! ColorCell
-            cell.contentView.backgroundColor = colorData[indexPath.item]
+            cell.colorView.backgroundColor = colorData[indexPath.item]
             return cell
         }
         return UICollectionViewCell()
@@ -313,12 +398,31 @@ extension CreateNewHabitViewController: UICollectionViewDelegate, UICollectionVi
         return 10
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.row == 0 {
-            navigateToCategory()
-        } else if indexPath.row == 1 {
-            navigateToSchedule()
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == emojiCollectionView {
+            if let cell = collectionView.cellForItem(at: indexPath) as? EmojiCell {
+                cell.setSelectedBackground(isSelected: true)
+            }
+            selectedEmoji = emojiData[indexPath.item]
+        } else if collectionView == colorCollectionView {
+            if let cell = collectionView.cellForItem(at: indexPath) as? ColorCell {
+                cell.setSelectedBorder(isSelected: true, color: colorData[indexPath.item])
+            }
+            selectedColor = colorData[indexPath.item]
         }
+        checkIfCorrect()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if collectionView == emojiCollectionView {
+            if let cell = collectionView.cellForItem(at: indexPath) as? EmojiCell {
+                cell.setSelectedBackground(isSelected: false)
+            }
+        } else if collectionView == colorCollectionView {
+            if let cell = collectionView.cellForItem(at: indexPath) as? ColorCell {
+                cell.setSelectedBorder(isSelected: false, color: .clear)
+            }
+        }
+        checkIfCorrect()
     }
 }
