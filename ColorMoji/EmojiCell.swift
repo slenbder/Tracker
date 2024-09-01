@@ -36,7 +36,7 @@ class EmojiCell: UICollectionViewCell {
     }
     
     func setSelectedBackground(isSelected: Bool) {
-        contentView.backgroundColor = isSelected ? .ypGray : .clear
+        contentView.backgroundColor = isSelected ? .ypLightGray : .clear
     }
 }
 
@@ -70,7 +70,7 @@ class ColorCell: UICollectionViewCell {
     
     func setSelectedBorder(isSelected: Bool, color: UIColor) {
         contentView.layer.borderWidth = isSelected ? 3 : 0
-        contentView.layer.borderColor = isSelected ? color.cgColor : nil
+        contentView.layer.borderColor = isSelected ? color.withAlphaComponent(0.3).cgColor : nil
     }
 }
 

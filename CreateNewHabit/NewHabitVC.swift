@@ -151,7 +151,7 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
         setUpView()
     }
     
-    let emojiData = ["😊", "😊", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🤖", "🤔", "🙏", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😴"]
+    let emojiData = ["😊", "😍", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🤖", "🤔", "🙏", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😴"]
     let colorData: [UIColor] = {
         var colors = [UIColor]()
         for i in 1...18 {
@@ -370,11 +370,15 @@ extension NewHabitVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == emojiCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCell.reuseIdentifier, for: indexPath) as! EmojiCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCell.reuseIdentifier, for: indexPath) as? EmojiCell else {
+                fatalError("Не удалось dequeuing EmojiCell")
+            }
             cell.emojiLabel.text = emojiData[indexPath.item]
             return cell
         } else if collectionView == colorCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.reuseIdentifier, for: indexPath) as! ColorCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.reuseIdentifier, for: indexPath) as? ColorCell else {
+                fatalError("Не удалось dequeuing ColorCell")
+            }
             cell.colorView.backgroundColor = colorData[indexPath.item]
             return cell
         }
