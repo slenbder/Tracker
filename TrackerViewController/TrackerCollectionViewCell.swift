@@ -67,7 +67,7 @@ class TrackerCollectionViewCell: UICollectionViewCell {
             
         ])
         
-        titleLabel.font = UIFont(name: "YSDisplay-Medium", size: 12)
+        titleLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         titleLabel.textColor = .white
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 2
@@ -81,7 +81,7 @@ class TrackerCollectionViewCell: UICollectionViewCell {
             titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: backgroundCardView.bottomAnchor, constant: -12)
         ])
         
-        daysLabel.font = UIFont(name: "YSDisplay-Medium", size: 12)
+        daysLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         daysLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(daysLabel)
         

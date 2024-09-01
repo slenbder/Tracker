@@ -13,7 +13,7 @@ class CreateNewIrregularEventViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Новое нерегулярное событие"
-        label.font = UIFont(name: "YSDisplay-Medium", size: 16)
+        label.font = UIFont.systemFont(ofSize: 16)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -22,7 +22,7 @@ class CreateNewIrregularEventViewController: UIViewController {
     private let nameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "      Введите название трекера"
-        textField.font = UIFont(name: "YSDisplay-Medium", size: 17)
+        textField.font = UIFont.systemFont(ofSize: 17)
         textField.backgroundColor = .ypBackground
         textField.layer.cornerRadius = 10
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -47,7 +47,7 @@ class CreateNewIrregularEventViewController: UIViewController {
         button.setTitleColor(.red, for: .normal)
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.red.cgColor
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -57,7 +57,7 @@ class CreateNewIrregularEventViewController: UIViewController {
         button.setTitle("Создать", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .gray
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -132,7 +132,7 @@ extension CreateNewIrregularEventViewController: UITableViewDelegate, UITableVie
         if indexPath.row == 0 {
             cell.textLabel?.text = "Категория"
         }
-        cell.textLabel?.font = UIFont(name: "YSDisplay-Medium", size: 17)
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         cell.textLabel?.textColor = .black
         cell.backgroundColor = .clear
         cell.accessoryType = .disclosureIndicator

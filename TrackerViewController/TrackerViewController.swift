@@ -238,14 +238,14 @@ final class TrackerViewController: UIViewController{
     private func setUpLabels() {
         trackerLabel.textColor = .black
         trackerLabel.text = "Трекеры"
-        trackerLabel.font = UIFont(name: "YSDisplay-Bold", size: 34)
+        trackerLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         trackerLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(trackerLabel)
         
         descriptionLabel.textColor = .black
         descriptionLabel.text = "Что будем отслеживать?"
         descriptionLabel.textAlignment = .center
-        descriptionLabel.font = UIFont(name: "YSDisplay-Medium", size: 12)
+        descriptionLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(descriptionLabel)
         

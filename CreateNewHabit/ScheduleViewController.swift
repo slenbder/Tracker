@@ -24,7 +24,7 @@ class ScheduleViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Расписание"
-        label.font = UIFont(name: "YSDisplay-Medium", size: 16)
+        label.font = UIFont.systemFont(ofSize: 19)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

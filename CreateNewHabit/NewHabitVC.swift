@@ -44,7 +44,7 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
     private var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Новая привычка"
-        label.font = UIFont(name: "YSDisplay-Medium", size: 16)
+        label.font = UIFont.systemFont(ofSize: 16)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -53,7 +53,7 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
     private var nameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "      Введите название трекера"
-        textField.font = UIFont(name: "YSDisplay-Medium", size: 17)
+        textField.font = UIFont.systemFont(ofSize: 17)
         textField.backgroundColor = .ypBackground
         textField.layer.cornerRadius = 10
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -104,7 +104,7 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
     private var emojiLabel: UILabel = {
         let label = UILabel()
         label.text = "Emoji"
-        label.font = UIFont(name: "YSDisplay-Bold", size: 19)
+        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -121,7 +121,7 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
     private var colorLabel: UILabel = {
         let label = UILabel()
         label.text = "Цвет"
-        label.font = UIFont(name: "YSDisplay-Bold", size: 19)
+        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -141,7 +141,7 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
         button.setTitleColor(.ypRed, for: .normal)
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.ypRed.cgColor
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -151,7 +151,7 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
         button.setTitle("Создать", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .ypGray
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -345,8 +345,8 @@ extension NewHabitVC: UITableViewDelegate, UITableViewDataSource {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         cell.textLabel?.text = habit[indexPath.row].name
         cell.detailTextLabel?.text = habit[indexPath.row].pickedSettings
-        cell.textLabel?.font = UIFont(name: "YSDisplay-Medium", size: 17)
-        cell.detailTextLabel?.font = UIFont(name: "YSDisplay-Medium", size: 17)
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
+        cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17)
         cell.textLabel?.textColor = .black
         cell.detailTextLabel?.textColor = .ypGray
         cell.backgroundColor = .clear

@@ -20,7 +20,7 @@ class TrackersHeaderReusableView: UICollectionReusableView{
     }
     
     func setUpTitle() {
-        titleLabel.font = UIFont(name: "YSDisplay-Bold", size: 19)
+        titleLabel.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         titleLabel.textColor = .black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(titleLabel)

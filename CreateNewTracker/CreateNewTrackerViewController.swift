@@ -32,7 +32,7 @@ final class CreateTrackerViewController: UIViewController{
     
     private func setUpLabel() {
         titleLabel.text = "Создание трекера"
-        titleLabel.font = UIFont(name: "YSDisplay-Medium", size: 16)
+        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         titleLabel.textColor = .black
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -48,7 +48,7 @@ final class CreateTrackerViewController: UIViewController{
     
     private func setUpButtons() {
         habitButton.setTitle("Привычка", for: .normal)
-        habitButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 16)
+        habitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         habitButton.titleLabel?.textColor = .white
         habitButton.titleLabel?.textAlignment = .center
         habitButton.backgroundColor = .black
@@ -57,7 +57,7 @@ final class CreateTrackerViewController: UIViewController{
         view.addSubview(habitButton)
         
         irregularEventButton.setTitle("Нерегулярное событие", for: .normal)
-        irregularEventButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 16)
+        irregularEventButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         irregularEventButton.titleLabel?.textColor = .white
         irregularEventButton.titleLabel?.textAlignment = .center
         irregularEventButton.backgroundColor = .black
