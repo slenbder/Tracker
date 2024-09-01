@@ -52,7 +52,7 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
     
     private var nameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "  Введите название трекера"
+        textField.placeholder = "      Введите название трекера"
         textField.font = UIFont(name: "YSDisplay-Medium", size: 17)
         textField.backgroundColor = .ypBackground
         textField.layer.cornerRadius = 10
@@ -85,24 +85,19 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
     }()
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-
-        let separator = UIView()
-        separator.backgroundColor = .lightGray
-
-        let separatorHeight: CGFloat = 0.5
-        let separatorInsetLeft: CGFloat = 16
-        let separatorInsetRight: CGFloat = -16
-        let separatorWidth = cell.contentView.frame.width - separatorInsetLeft - separatorInsetRight
-        separator.frame = CGRect(
-            x: separatorInsetLeft,
-            y: cell.contentView.frame.height - separatorHeight,
-            width: separatorWidth,
-            height: separatorHeight
-        )
-        
         if indexPath.row < tableView.numberOfRows(inSection: indexPath.section) - 1 {
+            let separator = UIView()
+            separator.backgroundColor = .lightGray
+            separator.translatesAutoresizingMaskIntoConstraints = false
+            
             cell.contentView.addSubview(separator)
+            
+            NSLayoutConstraint.activate([
+                separator.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 16),
+                separator.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: 16),
+                separator.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
+                separator.heightAnchor.constraint(equalToConstant: 0.5)
+            ])
         }
     }
     

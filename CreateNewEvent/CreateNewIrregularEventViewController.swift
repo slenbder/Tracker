@@ -21,7 +21,7 @@ class CreateNewIrregularEventViewController: UIViewController {
     
     private let nameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "  Введите название трекера"
+        textField.placeholder = "      Введите название трекера"
         textField.font = UIFont(name: "YSDisplay-Medium", size: 17)
         textField.backgroundColor = .ypBackground
         textField.layer.cornerRadius = 10
