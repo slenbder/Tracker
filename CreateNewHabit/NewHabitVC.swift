@@ -21,7 +21,7 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
         (name: "Категория", pickedSettings: ""),
         (name: "Расписание", pickedSettings: "")
     ]
-
+    
     // MARK: - UI Elements
     private var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -72,8 +72,10 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
     
     private var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.layer.cornerRadius = 10
-        tableView.separatorStyle = .singleLine
+        tableView.layer.cornerRadius = 16
+        tableView.separatorStyle = .none
+        tableView.rowHeight = 76
+        tableView.backgroundColor = .ypBackground
         tableView.isScrollEnabled = false
         tableView.tableHeaderView = nil
         tableView.sectionHeaderHeight = 0
@@ -81,6 +83,28 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         return tableView
     }()
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+
+        let separator = UIView()
+        separator.backgroundColor = .lightGray
+
+        let separatorHeight: CGFloat = 0.5
+        let separatorInsetLeft: CGFloat = 16
+        let separatorInsetRight: CGFloat = -16
+        let separatorWidth = cell.contentView.frame.width - separatorInsetLeft - separatorInsetRight
+        separator.frame = CGRect(
+            x: separatorInsetLeft,
+            y: cell.contentView.frame.height - separatorHeight,
+            width: separatorWidth,
+            height: separatorHeight
+        )
+        
+        if indexPath.row < tableView.numberOfRows(inSection: indexPath.section) - 1 {
+            cell.contentView.addSubview(separator)
+        }
+    }
     
     private var emojiLabel: UILabel = {
         let label = UILabel()
@@ -161,8 +185,8 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
         }
         return colors
     }()
-
-
+    
+    
     // MARK: - Setup UI
     private func setUpView() {
         view.backgroundColor = .white
@@ -203,7 +227,7 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
             backgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             backgroundView.heightAnchor.constraint(equalToConstant: 890),
-
+            
             
             
             titleLabel.topAnchor.constraint(equalTo: backgroundView.topAnchor, constant: 20),
