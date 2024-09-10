@@ -161,6 +161,7 @@
 				4F72614F2C480487004594B6 /* Tracker.swift */,
 				4F7261532C4804DE004594B6 /* TrackerCategory.swift */,
 				4F7261512C4804A5004594B6 /* TrackerRecord.swift */,
+				4F72614B2C48040D004594B6 /* EmojiCell.swift */,
 			);
 			path = TrackerModels;
 			sourceTree = "<group>";
@@ -173,12 +174,12 @@
 			path = CreateNewEvent;
 			sourceTree = "<group>";
 		};
-		4F72614A2C4803B2004594B6 /* ColorMoji */ = {
+		4F74A5DE2C9099F3002D37B0 /* TabBarController */ = {
 			isa = PBXGroup;
 			children = (
-				4F72614B2C48040D004594B6 /* EmojiCell.swift */,
+				4F72616A2C482FA8004594B6 /* TabBarViewController.swift */,
 			);
-			path = ColorMoji;
+			path = TabBarController;
 			sourceTree = "<group>";
 		};
 		4F7647992C82FD1A00E77313 /* CoreData */ = {
@@ -197,12 +198,11 @@
 		4FCA65BA2C8364DA009DCCB8 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
-				4FE37B142C2EFDC80080C748 /* Info.plist */,
 				4FE37B062C2EFDC70080C748 /* AppDelegate.swift */,
 				4FE37B082C2EFDC70080C748 /* SceneDelegate.swift */,
-				4F72616A2C482FA8004594B6 /* TabBarViewController.swift */,
 				4FE37B0F2C2EFDC80080C748 /* Assets.xcassets */,
 				4FE37B112C2EFDC80080C748 /* LaunchScreen.storyboard */,
+				4FE37B142C2EFDC80080C748 /* Info.plist */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -211,14 +211,14 @@
 			isa = PBXGroup;
 			children = (
 				4F7647992C82FD1A00E77313 /* CoreData */,
-				4F72614A2C4803B2004594B6 /* ColorMoji */,
 				4F7261492C4803A8004594B6 /* CreateNewEvent */,
 				4F7261462C48035D004594B6 /* CreateNewHabit */,
-				4F7261472C480389004594B6 /* CreateNewTracker */,
-				4F7261452C480350004594B6 /* StatsViewController */,
-				4FCA65BA2C8364DA009DCCB8 /* Tracker */,
-				4F7261482C48039A004594B6 /* TrackerModels */,
+				4F74A5DE2C9099F3002D37B0 /* TabBarController */,
 				4F7261442C48033E004594B6 /* TrackerViewController */,
+				4F7261452C480350004594B6 /* StatsViewController */,
+				4F7261472C480389004594B6 /* CreateNewTracker */,
+				4F7261482C48039A004594B6 /* TrackerModels */,
+				4FCA65BA2C8364DA009DCCB8 /* Tracker */,
 				4FE37B1C2C2EFDC80080C748 /* TrackerTests */,
 				4FE37B262C2EFDC80080C748 /* TrackerUITests */,
 				4FE37B042C2EFDC70080C748 /* Products */,
