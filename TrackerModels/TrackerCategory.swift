@@ -8,6 +8,6 @@
 import UIKit
 
 struct TrackerCategory {
-    let title: String
-    let trackers: [Tracker]
+    let title: CategoryList
+    let trackers : [Tracker]
 }

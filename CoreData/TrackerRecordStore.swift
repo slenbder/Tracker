@@ -8,6 +8,7 @@
 import CoreData
 import UIKit
 
+
 final class TrackerRecordStore {
     
     private let context: NSManagedObjectContext
@@ -27,7 +28,7 @@ final class TrackerRecordStore {
         newRecord.id = trackerRecord.id
         newRecord.date = trackerRecord.date
         do {
-            try context.save()  // Save the context after adding the tracker
+            try context.save()
         } catch {
             print("Failed to save context: \(error)")
         }

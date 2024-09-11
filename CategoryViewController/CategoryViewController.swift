@@ -46,7 +46,7 @@ class CategoryViewController: UIViewController {
     
     let image = UIImageView()
     image.translatesAutoresizingMaskIntoConstraints = false
-    image.image = UIImage(named: "tracker_stub")
+    image.image = UIImage(named: "tracker_error")
     
     stackView.addArrangedSubview(image)
     

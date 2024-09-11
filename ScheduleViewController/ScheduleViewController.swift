@@ -7,13 +7,13 @@
 
 import UIKit
 
-protocol ScheduleViewControllerDelegate: AnyObject {
+protocol SelectedScheduleDelegate: AnyObject {
     func selectScheduleScreen(_ screen: ScheduleViewController, didSelectedDays schedule: [Weekday])
 }
 
 class ScheduleViewController: UIViewController {
     
-    weak var delegate: ScheduleViewControllerDelegate?
+    weak var delegate: SelectedScheduleDelegate?
     
     let daysOfWeek : [Weekday] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
     let daysOfWeekUI = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
@@ -21,8 +21,6 @@ class ScheduleViewController: UIViewController {
     var selectedDays: [Weekday] = []
     
     let tableView = UITableView()
-    
-    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,8 +33,6 @@ class ScheduleViewController: UIViewController {
     private func backGround() {
         view.backgroundColor = .ypWhite
     }
-    
-    // MARK: - Setup UI
     
     private func setupCategoryView() {
         navigationItem.hidesBackButton = true

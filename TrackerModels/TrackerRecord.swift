@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct TrackerRecord {
-    let trackerId: UUID
-    let date: Date
+struct TrackerRecorder {
+  let id : UUID
+  let date: Date
 }

@@ -22,7 +22,7 @@ class TabBarController: UITabBarController {
         trackerViewController.title = "Трекеры"
         statisticsViewController.title = "Статистика"
         
-        trackerViewController.tabBarItem.image = UIImage(named: "trackers_active")
+        trackerViewController.tabBarItem.image = UIImage(named: "tracker_active")
         statisticsViewController.tabBarItem.image = UIImage(named: "statistics_active")
         
         let trackerNavigationController = UINavigationController(rootViewController: trackerViewController)

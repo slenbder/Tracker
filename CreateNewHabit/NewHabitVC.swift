@@ -1,5 +1,5 @@
 //
-//  CreateNewHabitViewController.swift
+//  CreateNewHabitVC.swift
 //  Tracker
 //
 //  Created by Кирилл Марьясов on 17.07.2024.
@@ -11,7 +11,7 @@ protocol NewHabitVCDelegate: AnyObject {
     func didCreateNewHabit(_ tracker: Tracker)
 }
 
-class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
+class NewHabitVC: UIViewController {
     
     weak var delegate: NewHabitVCDelegate?
     weak var dismissDelegate: DismissProtocol?
@@ -61,8 +61,6 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
         createTable()
         setupConstraint()
     }
-    
-    // MARK: - Setup UI
     
     private func backGround() {
         view.backgroundColor = .ypWhite
@@ -268,7 +266,7 @@ class NewHabitVC: UIViewController, ScheduleViewControllerDelegate {
         let newTracker = Tracker(id: UUID(),
                                  title: enteredEventName,
                                  color: selectedColor ?? .cSelection1,
-                                 emoji: selectedEmoji ?? "🤔",
+                                 emoji: selectedEmoji ?? "🍔",
                                  schedule: selectedSchedule)
         
         self.trackerVC.createNewTracker(tracker: newTracker)
@@ -324,6 +322,47 @@ extension NewHabitVC : UITableViewDelegate, UITableViewDataSource {
             scheduleVC.delegate = self
             navigationController?.pushViewController(scheduleVC, animated: true)
         }
+    }
+}
+
+extension NewHabitVC: UITextFieldDelegate {
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        if textField.text != "" {
+            return true
+        } else {
+            textField.placeholder = "Название не может быть пустым"
+            return false
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        enteredEventName = textField.text ?? ""
+        checkCreateButtonValidation()
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        enteredEventName = (textField.text as NSString?)?.replacingCharacters(in: range, with: string) ?? ""
+        checkCreateButtonValidation()
+        return true
+    }
+}
+
+extension NewHabitVC: CategoryViewControllerDelegate {
+    func categoryScreen(_ screen: CategoryViewController, didSelectedCategory category: TrackerCategory) {
+        selectedCategory = category
+        checkCreateButtonValidation()
+        tableView.reloadData()
+    }
+}
+
+extension NewHabitVC: SelectedScheduleDelegate {
+    func selectScheduleScreen(_ screen: ScheduleViewController, didSelectedDays schedule: [Weekday]) {
+        selectedSchedule = schedule
+        checkCreateButtonValidation()
+        tableView.reloadData()
     }
 }
 
@@ -385,43 +424,3 @@ extension NewHabitVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     }
 }
 
-extension NewHabitVC: UITextFieldDelegate {
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if textField.text != "" {
-            return true
-        } else {
-            textField.placeholder = "Название не может быть пустым"
-            return false
-        }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.endEditing(true)
-        enteredEventName = textField.text ?? ""
-        checkCreateButtonValidation()
-        return true
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        enteredEventName = (textField.text as NSString?)?.replacingCharacters(in: range, with: string) ?? ""
-        checkCreateButtonValidation()
-        return true
-    }
-}
-
-extension NewHabitVC: CategoryViewControllerDelegate {
-    func categoryScreen(_ screen: CategoryViewController, didSelectedCategory category: TrackerCategory) {
-        selectedCategory = category
-        checkCreateButtonValidation()
-        tableView.reloadData()
-    }
-}
-
-extension NewHabitVC: ScheduleViewControllerDelegate {
-    func selectScheduleScreen(_ screen: ScheduleViewController, didSelectedDays schedule: [Weekday]) {
-        selectedSchedule = schedule
-        checkCreateButtonValidation()
-        tableView.reloadData()
-    }
-}

@@ -12,7 +12,7 @@ protocol TrackerDoneDelegate: AnyObject {
     func uncompleteTracker(id: UUID, indexPath: IndexPath)
 }
 
-class TrackerCollectionViewCell: UICollectionViewCell {
+final class TrackerCollectionViewCell: UICollectionViewCell {
     
     weak var delegate: TrackerDoneDelegate?
     private var isCompletedToday: Bool  = false
@@ -79,7 +79,7 @@ class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     func setupAppearance() {
-        addSubviews(bodyView,emojiView,emojiLabel,titleLabel,dayCounterLabel,plusButton)
+        addSubviews(bodyView,emojiView, emojiLabel,titleLabel, dayCounterLabel, plusButton)
         NSLayoutConstraint.activate([
             
             bodyView.heightAnchor.constraint(equalToConstant: 90),
@@ -121,7 +121,7 @@ class TrackerCollectionViewCell: UICollectionViewCell {
         bodyView.backgroundColor = tracker.color
         plusButton.tintColor = tracker.color
         
-        let image = isCompletedToday ? UIImage(named: "doneLabel") : UIImage(named: "plus")
+        let image = isCompletedToday ? UIImage(named: "DoneIcon") : UIImage(named: "plusik")
         plusButton.setImage(image, for: .normal)
     }
     

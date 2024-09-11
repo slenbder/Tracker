@@ -5,6 +5,7 @@
 //  Created by Кирилл Марьясов on 31.08.2024.
 //
 
+import Foundation
 import CoreData
 import UIKit
 
@@ -41,7 +42,13 @@ extension TrackerCategoryStore {
     }
     
     func fetchAllCategories() -> [TrackerCategoryCoreData] {
-        return try! context.fetch(NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData"))
+        let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        do {
+            return try context.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Failed to fetch categories: \(error), \(error.userInfo)")
+            return []
+        }
     }
     
     func decodingCategory(from trackerCategoryCoreData: TrackerCategoryCoreData) -> TrackerCategory? {
@@ -67,7 +74,6 @@ extension TrackerCategoryStore {
     private func fetchCategory(with title: String) -> TrackerCategoryCoreData? {
         return fetchAllCategories().filter({$0.title == title}).first ?? nil
     }
-    
     func createCategoryAndAddTracker(_ tracker: Tracker, with titleCategory: String) {
         let category = fetchCategory(with: titleCategory) ?? createCategory(with: titleCategory)
         guard let trackerCoreData = trackerStore.addNewTracker(from: tracker) else { return }
