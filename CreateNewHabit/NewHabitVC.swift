@@ -418,7 +418,7 @@ extension NewHabitVC: CategoryViewControllerDelegate {
     }
 }
 
-extension NewHabitVC: SelectedScheduleDelegate {
+extension NewHabitVC: ScheduleViewControllerDelegate {
     func selectScheduleScreen(_ screen: ScheduleViewController, didSelectedDays schedule: [Weekday]) {
         selectedSchedule = schedule
         checkCreateButtonValidation()
