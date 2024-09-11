@@ -13,9 +13,7 @@ final class TrackerStore {
     private let context: NSManagedObjectContext
     
     convenience init() {
-        guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else {
-            fatalError("Не удалось получить NSManagedObjectContext")
-        }
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.init(context: context)
     }
     
@@ -23,28 +21,20 @@ final class TrackerStore {
         self.context = context
     }
     
-    func addNewTracker(from tracker: Tracker) -> TrackerCD? {
-        print("AddNewTracker is called")
-        
-        guard let trackerEntity = NSEntityDescription.entity(forEntityName: "TrackerCD", in: context) else {
-            print("Не удалось найти сущность TrackerCD")
-            return nil
-        }
-        
-        let newTracker = TrackerCD(entity: trackerEntity, insertInto: context)
+    func addNewTracker(from tracker: Tracker) -> TrackerCoreData? {
+        guard let trackerCoreData = NSEntityDescription.entity(forEntityName: "TrackerCoreData", in: context) else { return nil }
+        let newTracker = TrackerCoreData(entity: trackerCoreData, insertInto: context)
         newTracker.id = tracker.id
         newTracker.title = tracker.title
         newTracker.color = UIColorMarshalling.hexString(from: tracker.color)
         newTracker.emoji = tracker.emoji
         newTracker.schedule = tracker.schedule as NSArray?
-        print(newTracker)
         
         return newTracker
     }
     
     func fetchTracker() -> [Tracker] {
-        let fetchRequest = NSFetchRequest<TrackerCD>(entityName: "TrackerCD")
-        
+        let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         do {
             let trackerCoreDataArray = try context.fetch(fetchRequest)
             let trackers = trackerCoreDataArray.map { trackerCoreData in
@@ -53,7 +43,7 @@ final class TrackerStore {
                     title: trackerCoreData.title ?? "",
                     color: UIColorMarshalling.color(from: trackerCoreData.color ?? ""),
                     emoji: trackerCoreData.emoji ?? "",
-                    schedule: trackerCoreData.schedule as? [DayOfWeek] ?? []
+                    schedule: trackerCoreData.schedule as? [Weekday] ?? []
                 )
             }
             return trackers
@@ -63,20 +53,9 @@ final class TrackerStore {
         }
     }
     
-    func decodingTrackers(from trackersCoreData: TrackerCD) -> Tracker? {
-        guard let id = trackersCoreData.id,
-              let title = trackersCoreData.title,
-              let color = trackersCoreData.color,
-              let emoji = trackersCoreData.emoji else {
-            return nil
-        }
-        
-        return Tracker(
-            id: id,
-            title: title,
-            color: UIColorMarshalling.color(from: color),
-            emoji: emoji,
-            schedule: trackersCoreData.schedule as? [DayOfWeek] ?? []
-        )
+    func decodingTrackers(from trackersCoreData: TrackerCoreData) -> Tracker? {
+        guard let id = trackersCoreData.id, let title = trackersCoreData.title,
+              let color = trackersCoreData.color, let emoji = trackersCoreData.emoji else { return nil }
+        return Tracker(id: id, title: title, color: UIColorMarshalling.color(from: color), emoji: emoji, schedule: trackersCoreData.schedule as? [Weekday] ?? [])
     }
 }
