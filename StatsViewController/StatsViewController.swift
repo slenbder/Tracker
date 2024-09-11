@@ -7,10 +7,14 @@
 
 import UIKit
 
-final class StatsViewController: UIViewController{
+class StatisticsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        backGround()
+    }
+    
+    private func backGround() {
         view.backgroundColor = .ypWhite
     }
 }
