@@ -18,7 +18,6 @@
 		4F7261522C4804A5004594B6 /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7261512C4804A5004594B6 /* TrackerRecord.swift */; };
 		4F7261542C4804DE004594B6 /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7261532C4804DE004594B6 /* TrackerCategory.swift */; };
 		4F7261562C4804F5004594B6 /* CreateNewTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7261552C4804F5004594B6 /* CreateNewTrackerViewController.swift */; };
-		4F7261582C48051A004594B6 /* NewHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7261572C48051A004594B6 /* NewHabitViewController.swift */; };
 		4F72615A2C480522004594B6 /* ScheduleViewControllerO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7261592C480522004594B6 /* ScheduleViewControllerO.swift */; };
 		4F72615C2C480541004594B6 /* NewHabitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F72615B2C480541004594B6 /* NewHabitVC.swift */; };
 		4F72615E2C480559004594B6 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F72615D2C480559004594B6 /* StatsViewController.swift */; };
@@ -72,7 +71,6 @@
 		4F7261512C4804A5004594B6 /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
 		4F7261532C4804DE004594B6 /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		4F7261552C4804F5004594B6 /* CreateNewTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewTrackerViewController.swift; sourceTree = "<group>"; };
-		4F7261572C48051A004594B6 /* NewHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitViewController.swift; sourceTree = "<group>"; };
 		4F7261592C480522004594B6 /* ScheduleViewControllerO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewControllerO.swift; sourceTree = "<group>"; };
 		4F72615B2C480541004594B6 /* NewHabitVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitVC.swift; sourceTree = "<group>"; };
 		4F72615D2C480559004594B6 /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
@@ -166,7 +164,6 @@
 		4F7261462C48035D004594B6 /* CreateNewHabit */ = {
 			isa = PBXGroup;
 			children = (
-				4F7261572C48051A004594B6 /* NewHabitViewController.swift */,
 				4F72615B2C480541004594B6 /* NewHabitVC.swift */,
 			);
 			path = CreateNewHabit;
@@ -420,7 +417,6 @@
 				4F7647A32C82FDAF00E77313 /* TrackerRecordStore.swift in Sources */,
 				4FE37B072C2EFDC70080C748 /* AppDelegate.swift in Sources */,
 				4F7261542C4804DE004594B6 /* TrackerCategory.swift in Sources */,
-				4F7261582C48051A004594B6 /* NewHabitViewController.swift in Sources */,
 				4F4D4C0A2C90B0DA00FF7A71 /* CategoryViewModel.swift in Sources */,
 				4F7261602C48059D004594B6 /* TrackerViewController.swift in Sources */,
 				4F72615C2C480541004594B6 /* NewHabitVC.swift in Sources */,
