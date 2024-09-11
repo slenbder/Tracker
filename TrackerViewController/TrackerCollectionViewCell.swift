@@ -7,121 +7,142 @@
 
 import UIKit
 
+protocol TrackerDoneDelegate: AnyObject {
+    func completeTracker(id: UUID, indexPath: IndexPath)
+    func uncompleteTracker(id: UUID, indexPath: IndexPath)
+}
+
 class TrackerCollectionViewCell: UICollectionViewCell {
     
-    let emojiLabel = UILabel()
-    let titleLabel = UILabel()
-    let daysLabel = UILabel()
-    let plusButton = UIButton(type: .system)
-    private let backgroundCardView = UIView()
-    private let backgroundEmojiView = UIView()
+    weak var delegate: TrackerDoneDelegate?
+    private var isCompletedToday: Bool  = false
+    private var trackerID: UUID?
+    private var indexPath: IndexPath?
+    private var completedDays: Int? = 7
     
-    var trackerID: UUID?
-    var buttonAction: (() -> Void)?
+    lazy var bodyView: UIView = {
+        let bodyView = UIView()
+        bodyView.layer.cornerRadius = 16
+        bodyView.translatesAutoresizingMaskIntoConstraints = false
+        return bodyView
+    }()
+    
+    lazy var emojiView: UIView = {
+        let emojiView = UIView()
+        emojiView.layer.cornerRadius = 12
+        emojiView.layer.masksToBounds = true
+        emojiView.backgroundColor = .white
+        emojiView.alpha = 0.3
+        emojiView.translatesAutoresizingMaskIntoConstraints = false
+        return emojiView
+    }()
+    
+    lazy var emojiLabel: UILabel = {
+        let emojiLabel = UILabel()
+        emojiLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        emojiLabel.translatesAutoresizingMaskIntoConstraints = false
+        return emojiLabel
+    }()
+    
+    lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        titleLabel.textColor = .white
+        titleLabel.numberOfLines = 2
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        return titleLabel
+    }()
+    
+    lazy var dayCounterLabel: UILabel = {
+        let dayCounterLabel = UILabel()
+        dayCounterLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        dayCounterLabel.textColor = .ypBlack
+        dayCounterLabel.translatesAutoresizingMaskIntoConstraints = false
+        return dayCounterLabel
+    }()
+    
+    lazy var plusButton: UIButton = {
+        let plusButton = UIButton()
+        plusButton.translatesAutoresizingMaskIntoConstraints = false
+        plusButton.layer.cornerRadius = 17
+        plusButton.addTarget(self, action: #selector(trackerDoneTapped), for: .touchUpInside)
+        return plusButton
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
+        setupAppearance()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        backgroundColor = nil
-    }
-    
-    private func setupView() {
-        backgroundCardView.layer.cornerRadius = 10
-        backgroundCardView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(backgroundCardView)
-        
+    func setupAppearance() {
+        addSubviews(bodyView,emojiView,emojiLabel,titleLabel,dayCounterLabel,plusButton)
         NSLayoutConstraint.activate([
-            backgroundCardView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            backgroundCardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            backgroundCardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundCardView.heightAnchor.constraint(equalToConstant: 90)
-        ])
-        
-        backgroundEmojiView.layer.cornerRadius = 12
-        backgroundEmojiView.backgroundColor = .white.withAlphaComponent(0.3)
-        backgroundEmojiView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundCardView.addSubview(backgroundEmojiView)
-        
-        NSLayoutConstraint.activate([
-            backgroundEmojiView.widthAnchor.constraint(equalToConstant: 24),
-            backgroundEmojiView.heightAnchor.constraint(equalToConstant: 24),
-            backgroundEmojiView.topAnchor.constraint(equalTo: backgroundCardView.topAnchor, constant: 12),
-            backgroundEmojiView.leadingAnchor.constraint(equalTo: backgroundCardView.leadingAnchor, constant: 12)
-        ])
-        
-        emojiLabel.translatesAutoresizingMaskIntoConstraints = false
-        backgroundEmojiView.addSubview(emojiLabel)
-        
-        NSLayoutConstraint.activate([
-            emojiLabel.centerXAnchor.constraint(equalTo: backgroundEmojiView.centerXAnchor),
-            emojiLabel.centerYAnchor.constraint(equalTo: backgroundEmojiView.centerYAnchor)
             
-        ])
-        
-        titleLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        titleLabel.textColor = .white
-        titleLabel.textAlignment = .left
-        titleLabel.numberOfLines = 2
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        backgroundCardView.addSubview(titleLabel)
-        
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: backgroundCardView.leadingAnchor, constant: 12),
-            titleLabel.trailingAnchor.constraint(equalTo: backgroundCardView.trailingAnchor, constant: -12),
-            titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: backgroundCardView.bottomAnchor, constant: -12)
-        ])
-        
-        daysLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        daysLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(daysLabel)
-        
-        NSLayoutConstraint.activate([
-            daysLabel.topAnchor.constraint(equalTo: backgroundCardView.bottomAnchor, constant: 16),
-            daysLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12)
-        ])
-        
-        plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
-        plusButton.tintColor = .white
-        plusButton.layer.cornerRadius = 17
-        plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
-        plusButton.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(plusButton)
-        
-        NSLayoutConstraint.activate([
-            plusButton.widthAnchor.constraint(equalToConstant: 34),
+            bodyView.heightAnchor.constraint(equalToConstant: 90),
+            bodyView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            bodyView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            bodyView.topAnchor.constraint(equalTo: topAnchor),
+            
+            emojiView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            emojiView.topAnchor.constraint(equalTo: topAnchor, constant: 12),
+            emojiView.heightAnchor.constraint(equalToConstant: 24),
+            emojiView.widthAnchor.constraint(equalToConstant: 24),
+            
+            emojiLabel.centerXAnchor.constraint(equalTo: emojiView.centerXAnchor),
+            emojiLabel.centerYAnchor.constraint(equalTo: emojiView.centerYAnchor),
+            
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+            titleLabel.bottomAnchor.constraint(equalTo: bodyView.bottomAnchor, constant: -12),
+            
+            dayCounterLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            dayCounterLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+            dayCounterLabel.topAnchor.constraint(equalTo: bodyView.bottomAnchor, constant: 16),
+            
             plusButton.heightAnchor.constraint(equalToConstant: 34),
-            plusButton.topAnchor.constraint(equalTo: backgroundCardView.bottomAnchor, constant: 8),
-            plusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12)
+            plusButton.widthAnchor.constraint(equalToConstant: 34),
+            plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+            plusButton.topAnchor.constraint(equalTo: bodyView.bottomAnchor, constant: 8)
         ])
     }
     
-    func configure(with tracker: Tracker, completedDays: Int, isCompleted: Bool) {
-        emojiLabel.text = tracker.emoji
+    func configureCell(tracker: Tracker, isCompletedToday: Bool, completedDays: Int, indexPath: IndexPath){
+        self.indexPath = indexPath
+        self.trackerID = tracker.id
+        self.isCompletedToday = isCompletedToday
         titleLabel.text = tracker.title
-        daysLabel.text = "\(completedDays) дней"
-        backgroundCardView.backgroundColor = tracker.color
-        trackerID = tracker.id
+        emojiLabel.text = tracker.emoji
+        dayCounterLabel.text = "\(completedDays) дней"
         
-        if isCompleted {
-            plusButton.setImage(UIImage(named: "doneLabel"), for: .normal)
-            plusButton.backgroundColor = tracker.color.withAlphaComponent(0.5)
+        bodyView.backgroundColor = tracker.color
+        plusButton.tintColor = tracker.color
+        
+        let image = isCompletedToday ? UIImage(named: "doneLabel") : UIImage(named: "plus")
+        plusButton.setImage(image, for: .normal)
+    }
+    
+    @objc private func trackerDoneTapped() {
+        guard let trackerID = trackerID,
+              let indexPath = indexPath else {
+            assertionFailure("no trackerID")
+            return
+        }
+        
+        if isCompletedToday {
+            delegate?.uncompleteTracker(id: trackerID, indexPath: indexPath)
         } else {
-            plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
-            plusButton.backgroundColor = tracker.color
+            delegate?.completeTracker(id: trackerID, indexPath: indexPath)
         }
     }
     
-    @objc private func plusButtonTapped() {
-        buttonAction?()
+    func addSubviews(_ views: UIView...) {
+        views.forEach({addSubview($0)})
     }
+    
+    
+    
 }
