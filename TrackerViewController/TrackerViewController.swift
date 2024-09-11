@@ -209,7 +209,7 @@ final class TrackerViewController: UIViewController{
     
     @objc func plusButtonTapped() {
         print("PlusButtonTapped")
-        let newTrackerVC = NewTrackerViewController()
+        let newTrackerVC = CreateTrackerViewController()
         newTrackerVC.habitDelegate = self
         newTrackerVC.eventDelegate = self
         let navigationController = UINavigationController(rootViewController: newTrackerVC)
