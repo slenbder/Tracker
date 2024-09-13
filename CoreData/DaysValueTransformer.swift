@@ -8,11 +8,15 @@
 import Foundation
 import CoreData
 
-@objc (DaysValueTransformer)
-final class DaysValueTransformer: ValueTransformer {
+@objc(DaysValueTransformer)
+class DaysValueTransformer: ValueTransformer {
+    override class func transformedValueClass() -> AnyClass {
+        return NSData.self
+    }
     
-    override class func transformedValueClass() -> AnyClass { NSData.self }
-    override class func allowsReverseTransformation() -> Bool { true }
+    override class func allowsReverseTransformation() -> Bool {
+        return true
+    }
     
     override func transformedValue(_ value: Any?) -> Any? {
         guard let weekdays = value as? [Weekday] else { return nil }
