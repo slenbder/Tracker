@@ -22,8 +22,8 @@ class TabBarController: UITabBarController {
         trackerViewController.title = "Трекеры"
         statisticsViewController.title = "Статистика"
         
-        trackerViewController.tabBarItem.image = UIImage(named: "tracker_active")
-        statisticsViewController.tabBarItem.image = UIImage(named: "statistics_active")
+        trackerViewController.tabBarItem.image = UIImage(named: "TBTrackerIcon")
+        statisticsViewController.tabBarItem.image = UIImage(named: "TBStatsIcon")
         
         let trackerNavigationController = UINavigationController(rootViewController: trackerViewController)
         trackerNavigationController.navigationBar.prefersLargeTitles = true

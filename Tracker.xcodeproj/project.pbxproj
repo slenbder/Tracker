@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4F2D89CA2C91B92000E6464B /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D89C82C91B92000E6464B /* Model.xcdatamodeld */; };
+		4F2D89CA2C91B92000E6464B /* Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D89C82C91B92000E6464B /* Tracker.xcdatamodeld */; };
 		4F4D4C0A2C90B0DA00FF7A71 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D4C092C90B0DA00FF7A71 /* CategoryViewModel.swift */; };
 		4F4D4C0C2C90B0E900FF7A71 /* NewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D4C0B2C90B0E900FF7A71 /* NewCategoryViewController.swift */; };
 		4F4D4C0E2C90B0FD00FF7A71 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D4C0D2C90B0FD00FF7A71 /* CategoryViewController.swift */; };
@@ -225,7 +225,7 @@
 				4FE37B0F2C2EFDC80080C748 /* Assets.xcassets */,
 				4FE37B112C2EFDC80080C748 /* LaunchScreen.storyboard */,
 				4FE37B142C2EFDC80080C748 /* Info.plist */,
-				4F2D89C82C91B92000E6464B /* Model.xcdatamodeld */,
+				4F2D89C82C91B92000E6464B /* Tracker.xcdatamodeld */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -422,7 +422,7 @@
 				4F7261602C48059D004594B6 /* TrackerViewController.swift in Sources */,
 				4F72615C2C480541004594B6 /* NewHabitVC.swift in Sources */,
 				4F7261522C4804A5004594B6 /* TrackerRecord.swift in Sources */,
-				4F2D89CA2C91B92000E6464B /* Model.xcdatamodeld in Sources */,
+				4F2D89CA2C91B92000E6464B /* Tracker.xcdatamodeld in Sources */,
 				4F72616B2C482FA8004594B6 /* TabBarViewController.swift in Sources */,
 				4F76479D2C82FD6800E77313 /* UIColorMarshalling.swift in Sources */,
 				4F72615E2C480559004594B6 /* StatsViewController.swift in Sources */,
@@ -785,14 +785,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		4F2D89C82C91B92000E6464B /* Model.xcdatamodeld */ = {
+		4F2D89C82C91B92000E6464B /* Tracker.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				4F2D89C92C91B92000E6464B /* Model.xcdatamodel */,
 			);
 			currentVersion = 4F2D89C92C91B92000E6464B /* Model.xcdatamodel */;
-			name = Model.xcdatamodeld;
-			path = "/Users/kira/Documents/Учёба/Проекты/Учебные проекты/Tracker/Tracker/Model.xcdatamodeld";
+			path = Tracker.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

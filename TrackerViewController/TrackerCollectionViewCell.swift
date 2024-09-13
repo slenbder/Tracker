@@ -14,12 +14,6 @@ protocol TrackerDoneDelegate: AnyObject {
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
-    weak var delegate: TrackerDoneDelegate?
-    private var isCompletedToday: Bool  = false
-    private var trackerID: UUID?
-    private var indexPath: IndexPath?
-    private var completedDays: Int? = 7
-    
     lazy var bodyView: UIView = {
         let bodyView = UIView()
         bodyView.layer.cornerRadius = 16
@@ -78,8 +72,47 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    weak var delegate: TrackerDoneDelegate?
+    private var isCompletedToday: Bool  = false
+    private var trackerID: UUID?
+    private var indexPath: IndexPath?
+    private var completedDays: Int? = 7
+    
+    func configureCell(tracker: Tracker, isCompletedToday: Bool, completedDays: Int, indexPath: IndexPath){
+        self.indexPath = indexPath
+        self.trackerID = tracker.id
+        self.isCompletedToday = isCompletedToday
+        titleLabel.text = tracker.title
+        emojiLabel.text = tracker.emoji
+        dayCounterLabel.text = "\(completedDays) дней"
+        
+        bodyView.backgroundColor = tracker.color
+        plusButton.tintColor = tracker.color
+        
+        let image = isCompletedToday ? UIImage(named: "TCDoneButton") : UIImage(named: "TCPlusButton")
+        plusButton.setImage(image, for: .normal)
+    }
+    
+    @objc private func trackerDoneTapped() {
+        guard let trackerID = trackerID,
+              let indexPath = indexPath else {
+            assertionFailure("no trackerID")
+            return
+        }
+        
+        if isCompletedToday {
+            delegate?.uncompleteTracker(id: trackerID, indexPath: indexPath)
+        } else {
+            delegate?.completeTracker(id: trackerID, indexPath: indexPath)
+        }
+    }
+    
+    func addSubviews(_ views: UIView...) {
+        views.forEach({addSubview($0)})
+    }
+    
     func setupAppearance() {
-        addSubviews(bodyView,emojiView, emojiLabel,titleLabel, dayCounterLabel, plusButton)
+        addSubviews(bodyView,emojiView,emojiLabel,titleLabel,dayCounterLabel,plusButton)
         NSLayoutConstraint.activate([
             
             bodyView.heightAnchor.constraint(equalToConstant: 90),
@@ -109,40 +142,4 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             plusButton.topAnchor.constraint(equalTo: bodyView.bottomAnchor, constant: 8)
         ])
     }
-    
-    func configureCell(tracker: Tracker, isCompletedToday: Bool, completedDays: Int, indexPath: IndexPath){
-        self.indexPath = indexPath
-        self.trackerID = tracker.id
-        self.isCompletedToday = isCompletedToday
-        titleLabel.text = tracker.title
-        emojiLabel.text = tracker.emoji
-        dayCounterLabel.text = "\(completedDays) дней"
-        
-        bodyView.backgroundColor = tracker.color
-        plusButton.tintColor = tracker.color
-        
-        let image = isCompletedToday ? UIImage(named: "DoneIcon") : UIImage(named: "plusik")
-        plusButton.setImage(image, for: .normal)
-    }
-    
-    @objc private func trackerDoneTapped() {
-        guard let trackerID = trackerID,
-              let indexPath = indexPath else {
-            assertionFailure("no trackerID")
-            return
-        }
-        
-        if isCompletedToday {
-            delegate?.uncompleteTracker(id: trackerID, indexPath: indexPath)
-        } else {
-            delegate?.completeTracker(id: trackerID, indexPath: indexPath)
-        }
-    }
-    
-    func addSubviews(_ views: UIView...) {
-        views.forEach({addSubview($0)})
-    }
-    
-    
-    
 }

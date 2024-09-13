@@ -133,7 +133,7 @@ final class TrackerViewController: UIViewController{
     }
     
     private func setupTrackerView() {
-        let plusButton = UIBarButtonItem(image: UIImage(named: "tabbarplusbutton"), style: .plain, target: self, action: #selector(plusButtonTapped))
+        let plusButton = UIBarButtonItem(image: UIImage(named: "HeaderPlusButton"), style: .plain, target: self, action: #selector(plusButtonTapped))
         plusButton.tintColor = .ypBlack
         navigationItem.leftBarButtonItem = plusButton
         
@@ -148,7 +148,7 @@ final class TrackerViewController: UIViewController{
         view.addSubview(stackView)
         
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = UIImage(named: "tracker_error")
+        image.image = UIImage(named: "TrackerMainScreenStar")
         stackView.addArrangedSubview(image)
         
         label.translatesAutoresizingMaskIntoConstraints = false
