@@ -7,10 +7,31 @@
 
 import UIKit
 
+// MARK: - ColorCell
+
 class ColorCell: UICollectionViewCell {
     
-    var colorView: UIView!
-    var borderView: UIView!
+    // MARK: - UI Elements
+    
+    private lazy var colorView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var borderView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 12
+        view.layer.borderColor = UIColor.clear.cgColor
+        view.layer.borderWidth = 4
+        view.isHidden = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    // MARK: - Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,14 +43,12 @@ class ColorCell: UICollectionViewCell {
         setupViews()
     }
     
+    // MARK: - Setup Views
+    
     private func setupViews() {
-        
-        colorView = UIView()
-        colorView.layer.cornerRadius = 8
-        colorView.layer.masksToBounds = true
         contentView.addSubview(colorView)
+        contentView.addSubview(borderView)
         
-        colorView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             colorView.widthAnchor.constraint(equalToConstant: 40),
             colorView.heightAnchor.constraint(equalToConstant: 40),
@@ -37,14 +56,6 @@ class ColorCell: UICollectionViewCell {
             colorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
-        borderView = UIView()
-        borderView.layer.cornerRadius = 12
-        borderView.layer.borderColor = UIColor.clear.cgColor
-        borderView.layer.borderWidth = 4
-        borderView.isHidden = true
-        contentView.addSubview(borderView)
-        
-        borderView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             borderView.leadingAnchor.constraint(equalTo: colorView.leadingAnchor, constant: -8),
             borderView.trailingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: 8),
@@ -53,14 +64,11 @@ class ColorCell: UICollectionViewCell {
         ])
     }
     
+    // MARK: - Configure Cell
+    
     func configure(with color: UIColor, isSelected: Bool) {
         colorView.backgroundColor = color
         borderView.isHidden = !isSelected
-        if isSelected {
-            borderView.layer.borderColor = color.withAlphaComponent(0.4).cgColor
-        } else {
-            borderView.layer.borderColor = UIColor.clear.cgColor
-        }
+        borderView.layer.borderColor = isSelected ? color.withAlphaComponent(0.4).cgColor : UIColor.clear.cgColor
     }
 }
-

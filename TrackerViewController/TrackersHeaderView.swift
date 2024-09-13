@@ -7,8 +7,14 @@
 
 import UIKit
 
-class TrackersHeaderReusableView: UICollectionReusableView{
+// MARK: - TrackersHeaderReusableView
+
+class TrackersHeaderReusableView: UICollectionReusableView {
+    // MARK: - UI Elements
+    
     let titleLabel = UILabel()
+    
+    // MARK: - Initializers
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,7 +25,9 @@ class TrackersHeaderReusableView: UICollectionReusableView{
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setUpTitle() {
+    // MARK: - Setup
+    
+    private func setUpTitle() {
         titleLabel.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         titleLabel.textColor = .black
         titleLabel.translatesAutoresizingMaskIntoConstraints = false

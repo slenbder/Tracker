@@ -7,12 +7,18 @@
 
 import UIKit
 
+// MARK: - TrackerDoneDelegate
+
 protocol TrackerDoneDelegate: AnyObject {
     func completeTracker(id: UUID, indexPath: IndexPath)
     func uncompleteTracker(id: UUID, indexPath: IndexPath)
 }
 
+// MARK: - TrackerCollectionViewCell
+
 final class TrackerCollectionViewCell: UICollectionViewCell {
+    
+    // MARK: - UI Elements
     
     lazy var bodyView: UIView = {
         let bodyView = UIView()
@@ -63,6 +69,16 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return plusButton
     }()
     
+    // MARK: - Properties
+    
+    weak var delegate: TrackerDoneDelegate?
+    private var isCompletedToday: Bool  = false
+    private var trackerID: UUID?
+    private var indexPath: IndexPath?
+    private var completedDays: Int? = 7
+    
+    // MARK: - Initializers
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupAppearance()
@@ -72,11 +88,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    weak var delegate: TrackerDoneDelegate?
-    private var isCompletedToday: Bool  = false
-    private var trackerID: UUID?
-    private var indexPath: IndexPath?
-    private var completedDays: Int? = 7
+    // MARK: - Configuration
     
     func configureCell(tracker: Tracker, isCompletedToday: Bool, completedDays: Int, indexPath: IndexPath){
         self.indexPath = indexPath
@@ -93,6 +105,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         plusButton.setImage(image, for: .normal)
     }
     
+    // MARK: - Actions
+    
     @objc private func trackerDoneTapped() {
         guard let trackerID = trackerID,
               let indexPath = indexPath else {
@@ -107,14 +121,15 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    // MARK: - Layout
+    
     func addSubviews(_ views: UIView...) {
         views.forEach({addSubview($0)})
     }
     
-    func setupAppearance() {
-        addSubviews(bodyView,emojiView,emojiLabel,titleLabel,dayCounterLabel,plusButton)
+    private func setupAppearance() {
+        addSubviews(bodyView, emojiView, emojiLabel, titleLabel, dayCounterLabel, plusButton)
         NSLayoutConstraint.activate([
-            
             bodyView.heightAnchor.constraint(equalToConstant: 90),
             bodyView.leadingAnchor.constraint(equalTo: leadingAnchor),
             bodyView.trailingAnchor.constraint(equalTo: trailingAnchor),

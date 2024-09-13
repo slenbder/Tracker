@@ -7,11 +7,17 @@
 
 import UIKit
 
+// MARK: - CreateNewIrregularEventViewControllerDelegate
+
 protocol CreateNewIrregularEventViewControllerDelegate: AnyObject {
     func didCreateNewEvent(_ tracker: Tracker)
 }
 
+// MARK: - CreateNewIrregularEventViewController
+
 class CreateNewIrregularEventViewController: UIViewController {
+    
+    // MARK: - Properties
     
     weak var delegate: CreateNewIrregularEventViewControllerDelegate?
     weak var dismissDelegate: DismissProtocol?
@@ -236,6 +242,8 @@ class CreateNewIrregularEventViewController: UIViewController {
         ])
     }
     
+    // MARK: - Helper Methods
+    
     private func calculateCollectionViewHeight(for itemCount: Int, itemsPerRow: Int, itemHeight: CGFloat) -> CGFloat {
         let rows = ceil(Double(itemCount) / Double(itemsPerRow))
         return CGFloat(rows) * itemHeight
@@ -267,6 +275,8 @@ class CreateNewIrregularEventViewController: UIViewController {
         }
     }
     
+    // MARK: - Actions
+    
     @objc func cancel() {
         print("Cancel")
         dismiss(animated: true)
@@ -291,6 +301,8 @@ class CreateNewIrregularEventViewController: UIViewController {
         self.dismiss(animated: true)
     }
 }
+
+// MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension CreateNewIrregularEventViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -319,6 +331,8 @@ extension CreateNewIrregularEventViewController: UITableViewDelegate, UITableVie
         }
     }
 }
+
+// MARK: - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 
 extension CreateNewIrregularEventViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -378,6 +392,8 @@ extension CreateNewIrregularEventViewController: UICollectionViewDataSource, UIC
     }
 }
 
+// MARK: - UITextFieldDelegate
+
 extension CreateNewIrregularEventViewController: UITextFieldDelegate {
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -402,6 +418,8 @@ extension CreateNewIrregularEventViewController: UITextFieldDelegate {
         return true
     }
 }
+
+// MARK: - CategoryViewControllerDelegate
 
 extension CreateNewIrregularEventViewController: CategoryViewControllerDelegate {
     func categoryScreen(_ screen: CategoryViewController, didSelectedCategory category: TrackerCategory) {

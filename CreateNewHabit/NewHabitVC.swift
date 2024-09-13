@@ -7,11 +7,17 @@
 
 import UIKit
 
+// MARK: - NewHabitVCDelegate
+
 protocol NewHabitVCDelegate: AnyObject {
     func didCreateNewHabit(_ tracker: Tracker)
 }
 
+// MARK: - NewHabitVC
+
 class NewHabitVC: UIViewController {
+    
+    // MARK: - Properties
     
     weak var delegate: NewHabitVCDelegate?
     weak var dismissDelegate: DismissProtocol?
@@ -61,6 +67,8 @@ class NewHabitVC: UIViewController {
         createTable()
         setupConstraint()
     }
+    
+    // MARK: - Setup UI
     
     private func backGround() {
         view.backgroundColor = .ypWhite
@@ -176,7 +184,7 @@ class NewHabitVC: UIViewController {
         colorCollectionView.backgroundColor = .clear
         colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        colorCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: "colorCell") // Регистрация ColorCell
+        colorCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: "colorCell")
         
         contentView.addSubview(colorCollectionView)
     }
@@ -239,6 +247,8 @@ class NewHabitVC: UIViewController {
         ])
     }
     
+    // MARK: - Helper Methods
+    
     private func calculateCollectionViewHeight(for itemCount: Int, itemsPerRow: Int, itemHeight: CGFloat) -> CGFloat {
         let rows = ceil(Double(itemCount) / Double(itemsPerRow))
         return CGFloat(rows) * itemHeight
@@ -255,6 +265,8 @@ class NewHabitVC: UIViewController {
             createButton.setTitleColor(.ypWhite, for: .normal)
         }
     }
+    
+    // MARK: - Actions
     
     @objc func cancel(_ sender: UIButton) {
         print("Cancel")
@@ -274,6 +286,8 @@ class NewHabitVC: UIViewController {
         self.dismiss(animated: true)
     }
 }
+
+// MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension NewHabitVC : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -325,6 +339,8 @@ extension NewHabitVC : UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+// MARK: - UITextFieldDelegate
+
 extension NewHabitVC: UITextFieldDelegate {
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -350,6 +366,8 @@ extension NewHabitVC: UITextFieldDelegate {
     }
 }
 
+// MARK: - CategoryViewControllerDelegate
+
 extension NewHabitVC: CategoryViewControllerDelegate {
     func categoryScreen(_ screen: CategoryViewController, didSelectedCategory category: TrackerCategory) {
         selectedCategory = category
@@ -358,6 +376,8 @@ extension NewHabitVC: CategoryViewControllerDelegate {
     }
 }
 
+// MARK: - SelectedScheduleDelegate
+
 extension NewHabitVC: SelectedScheduleDelegate {
     func selectScheduleScreen(_ screen: ScheduleViewController, didSelectedDays schedule: [Weekday]) {
         selectedSchedule = schedule
@@ -365,6 +385,8 @@ extension NewHabitVC: SelectedScheduleDelegate {
         tableView.reloadData()
     }
 }
+
+// MARK: - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 
 extension NewHabitVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     

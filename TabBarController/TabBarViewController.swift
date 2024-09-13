@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - TabBarController
+
 class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
@@ -14,6 +16,8 @@ class TabBarController: UITabBarController {
         configureTabBar()
         tabBarBorder()
     }
+    
+    // MARK: - Private Methods
     
     private func configureTabBar() {
         let trackerViewController = TrackerViewController()
