@@ -264,7 +264,7 @@ class CreateNewIrregularEventViewController: UIViewController {
     }
     
     func checkCreateButtonValidation() {
-        if selectedCategory != nil && !enteredTrackerName.isEmpty {
+        if selectedCategory != nil && !enteredTrackerName.isEmpty && selectedEmoji != nil && selectedColor != nil {
             createButton.isEnabled = true
             createButton.backgroundColor = .ypBlack
             createButton.setTitleColor(.ypWhite, for: .normal)

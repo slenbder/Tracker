@@ -278,7 +278,7 @@ class NewHabitVC: UIViewController {
         let newTracker = Tracker(id: UUID(),
                                  title: enteredEventName,
                                  color: selectedColor ?? .cSelection1,
-                                 emoji: selectedEmoji ?? "🍔",
+                                 emoji: selectedEmoji ?? "🤔",
                                  schedule: selectedSchedule)
         
         self.trackerVC.createNewTracker(tracker: newTracker)
