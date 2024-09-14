@@ -379,7 +379,7 @@ extension CreateNewIrregularEventViewController: UICollectionViewDataSource, UIC
                 cell.contentView.backgroundColor = .clear
             }
             if let cell = collectionView.cellForItem(at: indexPath), selectedEmoji != nil {
-                cell.contentView.backgroundColor = .ypBackground
+                cell.contentView.backgroundColor = .ypLightGray
                 cell.layer.cornerRadius = 16
                 cell.layer.masksToBounds = true
             }

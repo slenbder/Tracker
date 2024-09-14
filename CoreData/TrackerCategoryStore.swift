@@ -77,10 +77,18 @@ extension TrackerCategoryStore {
     private func fetchCategory(with title: String) -> TrackerCategoryCoreData? {
         return fetchAllCategories().filter({$0.title == title}).first ?? nil
     }
+    
     func createCategoryAndAddTracker(_ tracker: Tracker, with titleCategory: String) {
-        let category = fetchCategory(with: titleCategory) ?? createCategory(with: titleCategory)
-        guard let trackerCoreData = trackerStore.addNewTracker(from: tracker) else { return }
+        guard let category = fetchCategory(with: titleCategory) ?? createCategory(with: titleCategory) else {
+            print("Failed to fetch or create category")
+            return
+        }
+        guard let trackerCoreData = trackerStore.addNewTracker(from: tracker) else {
+            print("Failed to add new tracker")
+            return
+        }
         category.addToTrackers(trackerCoreData)
+        
         do {
             try context.save()
         } catch {
@@ -88,8 +96,11 @@ extension TrackerCategoryStore {
         }
     }
     
-    private func createCategory(with title: String) -> TrackerCategoryCoreData {
-        let entity = NSEntityDescription.entity(forEntityName: "TrackerCategoryCoreData", in: context)!
+    private func createCategory(with title: String) -> TrackerCategoryCoreData? {
+        guard let entity = NSEntityDescription.entity(forEntityName: "TrackerCategoryCoreData", in: context) else {
+            print("Failed to create entity for TrackerCategoryCoreData")
+            return nil
+        }
         let newCategory = TrackerCategoryCoreData(entity: entity, insertInto: context)
         newCategory.title = title
         newCategory.trackers = NSSet(array: [])

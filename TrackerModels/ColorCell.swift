@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - ColorCell
 
-class ColorCell: UICollectionViewCell {
+final class ColorCell: UICollectionViewCell {
     
     // MARK: - UI Elements
     
