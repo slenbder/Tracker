@@ -24,7 +24,7 @@ final class TrackerStore {
         self.context = context
     }
     
-    func addNewTracker(from tracker: Tracker) -> TrackerCoreData? {
+    private func addNewTracker(from tracker: Tracker) -> TrackerCoreData? {
         guard let trackerCoreData = NSEntityDescription.entity(forEntityName: "TrackerCoreData", in: context) else { return nil }
         let newTracker = TrackerCoreData(entity: trackerCoreData, insertInto: context)
         newTracker.id = tracker.id
@@ -56,9 +56,21 @@ final class TrackerStore {
         }
     }
     
-    func decodingTrackers(from trackersCoreData: TrackerCoreData) -> Tracker? {
+    private func decodingTrackers(from trackersCoreData: TrackerCoreData) -> Tracker? {
         guard let id = trackersCoreData.id, let title = trackersCoreData.title,
               let color = trackersCoreData.color, let emoji = trackersCoreData.emoji else { return nil }
         return Tracker(id: id, title: title, color: UIColorMarshalling.color(from: color), emoji: emoji, schedule: trackersCoreData.schedule as? [Weekday] ?? [])
+    }
+}
+
+// MARK: - Public Accessors (Repite Methods)
+
+extension TrackerStore {
+    func addNewTrackerPublic(from tracker: Tracker) -> TrackerCoreData? {
+        return self.addNewTracker(from: tracker)
+    }
+    
+    func decodingTrackersPublic(from trackerCoreData: TrackerCoreData) -> Tracker? {
+        return decodingTrackers(from: trackerCoreData)
     }
 }

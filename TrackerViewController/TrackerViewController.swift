@@ -71,7 +71,7 @@ final class TrackerViewController: UIViewController{
         let storedTrackers = trackerStore.fetchTracker()
         print("Loaded Trackers: \(storedTrackers)")
         
-        let storedCategories = trackerCategoryStore.fetchAllCategories()
+        let storedCategories = trackerCategoryStore.fetchAllCategoriesPublic()
         print("Loaded Categories: \(storedCategories.map { $0.title })")
         
         let storedRecords = trackerRecordStore.fetchAllRecords()
@@ -79,7 +79,7 @@ final class TrackerViewController: UIViewController{
         print("Loaded Completed Trackers: \(completedTrackers)")
         
         if !storedCategories.isEmpty {
-            categories = storedCategories.compactMap { trackerCategoryStore.decodingCategory(from: $0) }
+            categories = storedCategories.compactMap { trackerCategoryStore.decodeCategoryPublic(from: $0) }
             print("Decoded Categories: \(categories)")
         } else {
             
@@ -310,8 +310,8 @@ extension TrackerViewController: CreateTrackerDelegate {
     func didDelegateNewTracker(_ tracker: Tracker) {
         print("didCreateNewHabit asked")
         createNewTracker(tracker: tracker)
-        if let _ = trackerStore.addNewTracker(from: tracker) {
-            trackerCategoryStore.createCategoryAndTracker(tracker: tracker, with: CategoryList.usefull.rawValue)
+        if let _ = trackerStore.addNewTrackerPublic(from: tracker) {
+            trackerCategoryStore.createCategoryAndTrackerPublic(tracker: tracker, with: CategoryList.usefull.rawValue)
         } else {
             print("Failed to save tracker")
         }
