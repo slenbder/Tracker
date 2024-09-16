@@ -68,45 +68,34 @@ final class TrackerViewController: UIViewController{
     // MARK: - Data Loading
     
     private func loadTrackersFromCoreData() {
-        // Получаем трекеры из стора
         let storedTrackers = trackerStore.fetchTrackers()
         print("Loaded Trackers: \(storedTrackers)")
         
-        // Получаем категории из стора
         let storedCategories = trackerCategoryStore.fetchAllCategories()
         print("Loaded Categories: \(storedCategories.map { $0.title.rawValue })")
         
-        // Получаем записи о выполненных трекерах
         let storedRecords = trackerRecordStore.fetchAllRecords()
         completedTrackers = storedRecords.map { TrackerRecorder(id: $0.id, date: $0.date) }
         print("Loaded Completed Trackers: \(completedTrackers)")
         
-        // Обновляем категории
         if !storedCategories.isEmpty {
-            // Если есть сохранённые категории, используем их
             categories = storedCategories
         } else {
-            // Если нет сохранённых категорий, но есть трекеры
             if !storedTrackers.isEmpty {
                 if let firstCategory = categories.first {
-                    // Обновляем существующую категорию трекерами из стора
                     let updatedCategory = TrackerCategory(title: firstCategory.title, trackers: storedTrackers)
                     categories[0] = updatedCategory
                 } else {
-                    // Если категорий нет, создаём новую категорию с трекерами из стора
                     let defaultCategory = TrackerCategory(title: .usefull, trackers: storedTrackers)
                     categories = [defaultCategory]
                 }
             } else {
-                // Если нет трекеров и категорий, оставляем категории как есть (пустые)
             }
         }
         
-        // Обновляем видимые категории и отображаем трекеры на текущую дату
         visibleCategory = categories
         showTrackersInDate(currentDate)
         
-        // Перезагружаем коллекцию
         collectionView.reloadData()
     }
     
