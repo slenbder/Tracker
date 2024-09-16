@@ -68,30 +68,45 @@ final class TrackerViewController: UIViewController{
     // MARK: - Data Loading
     
     private func loadTrackersFromCoreData() {
-        let storedTrackers = trackerStore.fetchTracker()
+        // Получаем трекеры из стора
+        let storedTrackers = trackerStore.fetchTrackers()
         print("Loaded Trackers: \(storedTrackers)")
         
-        let storedCategories = trackerCategoryStore.fetchAllCategoriesPublic()
-        print("Loaded Categories: \(storedCategories.map { $0.title })")
+        // Получаем категории из стора
+        let storedCategories = trackerCategoryStore.fetchAllCategories()
+        print("Loaded Categories: \(storedCategories.map { $0.title.rawValue })")
         
+        // Получаем записи о выполненных трекерах
         let storedRecords = trackerRecordStore.fetchAllRecords()
         completedTrackers = storedRecords.map { TrackerRecorder(id: $0.id, date: $0.date) }
         print("Loaded Completed Trackers: \(completedTrackers)")
         
+        // Обновляем категории
         if !storedCategories.isEmpty {
-            categories = storedCategories.compactMap { trackerCategoryStore.decodeCategoryPublic(from: $0) }
-            print("Decoded Categories: \(categories)")
+            // Если есть сохранённые категории, используем их
+            categories = storedCategories
         } else {
-            
-            if let firstCategory = categories.first {
-                let updatedCategory = TrackerCategory(title: firstCategory.title, trackers: storedTrackers)
-                categories[0] = updatedCategory
+            // Если нет сохранённых категорий, но есть трекеры
+            if !storedTrackers.isEmpty {
+                if let firstCategory = categories.first {
+                    // Обновляем существующую категорию трекерами из стора
+                    let updatedCategory = TrackerCategory(title: firstCategory.title, trackers: storedTrackers)
+                    categories[0] = updatedCategory
+                } else {
+                    // Если категорий нет, создаём новую категорию с трекерами из стора
+                    let defaultCategory = TrackerCategory(title: .usefull, trackers: storedTrackers)
+                    categories = [defaultCategory]
+                }
+            } else {
+                // Если нет трекеров и категорий, оставляем категории как есть (пустые)
             }
         }
         
+        // Обновляем видимые категории и отображаем трекеры на текущую дату
         visibleCategory = categories
         showTrackersInDate(currentDate)
         
+        // Перезагружаем коллекцию
         collectionView.reloadData()
     }
     
@@ -310,13 +325,17 @@ extension TrackerViewController: CreateTrackerDelegate {
     func didDelegateNewTracker(_ tracker: Tracker) {
         print("didCreateNewHabit asked")
         createNewTracker(tracker: tracker)
-        if let _ = trackerStore.addNewTrackerPublic(from: tracker) {
-            trackerCategoryStore.createCategoryAndTrackerPublic(tracker: tracker, with: CategoryList.usefull.rawValue)
-        } else {
-            print("Failed to save tracker")
-        }
         
-        mainScreenContent(Date())
+        do {
+            try trackerStore.addNewTracker(tracker)
+            
+            try trackerCategoryStore.createCategoryAndTracker(tracker: tracker, with: CategoryList.usefull.rawValue)
+            
+            mainScreenContent(Date())
+        } catch {
+            print("Failed to save tracker: \(error)")
+            
+        }
     }
 }
 

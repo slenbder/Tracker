@@ -5,6 +5,7 @@
 //  Created by Кирилл Марьясов on 31.08.2024.
 //
 
+import Foundation
 import CoreData
 import UIKit
 
@@ -13,10 +14,7 @@ final class TrackerStore {
     private let context: NSManagedObjectContext
     
     convenience init() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            fatalError("AppDelegate is not of type AppDelegate")
-        }
-        let context = appDelegate.persistentContainer.viewContext
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.init(context: context)
     }
     
@@ -24,31 +22,30 @@ final class TrackerStore {
         self.context = context
     }
     
-    private func addNewTracker(from tracker: Tracker) -> TrackerCoreData? {
-        guard let trackerCoreData = NSEntityDescription.entity(forEntityName: "TrackerCoreData", in: context) else { return nil }
-        let newTracker = TrackerCoreData(entity: trackerCoreData, insertInto: context)
+    public func addNewTracker(_ tracker: Tracker) throws {
+        guard let trackerEntity = NSEntityDescription.entity(forEntityName: "TrackerCoreData", in: context) else {
+            throw NSError(domain: "TrackerStore", code: 1, userInfo: [NSLocalizedDescriptionKey: "Unable to find entity description"])
+        }
+        
+        let newTracker = TrackerCoreData(entity: trackerEntity, insertInto: context)
         newTracker.id = tracker.id
         newTracker.title = tracker.title
         newTracker.color = UIColorMarshalling.hexString(from: tracker.color)
         newTracker.emoji = tracker.emoji
         newTracker.schedule = tracker.schedule as NSArray?
         
-        return newTracker
+        do {
+            try context.save()
+        } catch {
+            throw error
+        }
     }
     
-    func fetchTracker() -> [Tracker] {
+    public func fetchTrackers() -> [Tracker] {
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         do {
             let trackerCoreDataArray = try context.fetch(fetchRequest)
-            let trackers = trackerCoreDataArray.map { trackerCoreData in
-                return Tracker(
-                    id: trackerCoreData.id ?? UUID(),
-                    title: trackerCoreData.title ?? "",
-                    color: UIColorMarshalling.color(from: trackerCoreData.color ?? ""),
-                    emoji: trackerCoreData.emoji ?? "",
-                    schedule: trackerCoreData.schedule as? [Weekday] ?? []
-                )
-            }
+            let trackers = trackerCoreDataArray.compactMap { decodingTracker(from: $0) }
             return trackers
         } catch {
             print("Failed to fetch trackers: \(error)")
@@ -56,21 +53,30 @@ final class TrackerStore {
         }
     }
     
-    private func decodingTrackers(from trackersCoreData: TrackerCoreData) -> Tracker? {
-        guard let id = trackersCoreData.id, let title = trackersCoreData.title,
-              let color = trackersCoreData.color, let emoji = trackersCoreData.emoji else { return nil }
-        return Tracker(id: id, title: title, color: UIColorMarshalling.color(from: color), emoji: emoji, schedule: trackersCoreData.schedule as? [Weekday] ?? [])
+    internal func decodingTracker(from trackerCoreData: TrackerCoreData) -> Tracker? {
+        guard let id = trackerCoreData.id,
+              let title = trackerCoreData.title,
+              let colorHex = trackerCoreData.color,
+              let emoji = trackerCoreData.emoji else { return nil }
+        
+        let color = UIColorMarshalling.color(from: colorHex)
+        let schedule = trackerCoreData.schedule as? [Weekday] ?? []
+        
+        return Tracker(id: id, title: title, color: color, emoji: emoji, schedule: schedule)
     }
 }
 
-// MARK: - Public Accessors (Repite Methods)
-
 extension TrackerStore {
-    func addNewTrackerPublic(from tracker: Tracker) -> TrackerCoreData? {
-        return self.addNewTracker(from: tracker)
-    }
     
-    func decodingTrackersPublic(from trackerCoreData: TrackerCoreData) -> Tracker? {
-        return decodingTrackers(from: trackerCoreData)
+    func fetchTrackerCoreData(by id: UUID) -> TrackerCoreData? {
+        let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        do {
+            let trackers = try context.fetch(fetchRequest)
+            return trackers.first
+        } catch {
+            print("Failed to fetch tracker by ID: \(error)")
+            return nil
+        }
     }
 }
