@@ -14,9 +14,13 @@ protocol TrackerCategoryStoreDelegate: AnyObject {
 }
 
 final class TrackerCategoryStore: NSObject {
+    // MARK: - Properties
+
     weak var delegate: TrackerCategoryStoreDelegate?
     private let context: NSManagedObjectContext
     private let trackerStore: TrackerStore
+
+    // MARK: - Initializers
 
     convenience override init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -24,21 +28,21 @@ final class TrackerCategoryStore: NSObject {
     }
 
     init(context: NSManagedObjectContext) {
-            self.context = context
-            self.trackerStore = TrackerStore(context: context)
-            super.init()
-        }
+        self.context = context
+        self.trackerStore = TrackerStore(context: context)
+        super.init()
+    }
 }
 
 // MARK: - Public Methods
 
 extension TrackerCategoryStore {
-
+    /// Создаёт новую категорию на основе модельного объекта `TrackerCategory`.
     func createCategory(_ category: TrackerCategory) {
         guard let entity = NSEntityDescription.entity(forEntityName: "TrackerCategoryCoreData", in: context) else { return }
         let categoryEntity = TrackerCategoryCoreData(entity: entity, insertInto: context)
         categoryEntity.title = category.title.rawValue
-        categoryEntity.trackers = NSSet(array: [])
+        categoryEntity.trackers = NSSet()
         do {
             try context.save()
         } catch {
@@ -46,6 +50,7 @@ extension TrackerCategoryStore {
         }
     }
 
+    /// Получает все категории и преобразует их в массив `TrackerCategory`.
     func fetchAllCategories() -> [TrackerCategory] {
         let fetchRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         do {
@@ -58,14 +63,12 @@ extension TrackerCategoryStore {
         }
     }
 
-
+    /// Создаёт категорию и добавляет в неё трекер.
     func createCategoryAndTracker(tracker: Tracker, with titleCategory: String) {
         do {
             let category = fetchOrCreateCategory(with: titleCategory)
-            
             try trackerStore.addNewTracker(tracker)
-          
-            guard let trackerCoreData = trackerStore.fetchTrackerCoreData(by: tracker.id) else { return }
+            guard let trackerCoreData = fetchTrackerCoreData(by: tracker.id) else { return }
             category.addToTrackers(trackerCoreData)
             try context.save()
         } catch {
@@ -73,11 +76,12 @@ extension TrackerCategoryStore {
         }
     }
 
+    /// Добавляет трекер в существующую категорию или создаёт новую категорию и добавляет в неё трекер.
     func createCategoryAndAddTracker(_ tracker: Tracker, with titleCategory: String) {
         do {
             let category = fetchOrCreateCategory(with: titleCategory)
             try trackerStore.addNewTracker(tracker)
-            guard let trackerCoreData = trackerStore.fetchTrackerCoreData(by: tracker.id) else { return }
+            guard let trackerCoreData = fetchTrackerCoreData(by: tracker.id) else { return }
             category.addToTrackers(trackerCoreData)
             try context.save()
         } catch {
@@ -89,18 +93,45 @@ extension TrackerCategoryStore {
 // MARK: - Private Methods
 
 extension TrackerCategoryStore {
-
+    /// Преобразует сущность `TrackerCategoryCoreData` в модельный объект `TrackerCategory`.
     private func decodingCategory(from trackerCategoryCoreData: TrackerCategoryCoreData) -> TrackerCategory? {
         guard let title = trackerCategoryCoreData.title else { return nil }
         guard let trackersCoreDataSet = trackerCategoryCoreData.trackers as? Set<TrackerCoreData> else { return nil }
 
         let trackers = trackersCoreDataSet.compactMap { trackerCoreData in
-            return trackerStore.decodingTracker(from: trackerCoreData)
+            return decodingTracker(from: trackerCoreData)
         }
 
         return TrackerCategory(title: CategoryList(rawValue: title) ?? .usefull, trackers: trackers)
     }
 
+    /// Преобразует сущность `TrackerCoreData` в модельный объект `Tracker`.
+    private func decodingTracker(from trackerCoreData: TrackerCoreData) -> Tracker? {
+        guard let id = trackerCoreData.id,
+              let title = trackerCoreData.title,
+              let colorHex = trackerCoreData.color,
+              let emoji = trackerCoreData.emoji else { return nil }
+
+        let color = UIColorMarshalling.color(from: colorHex)
+        let schedule = trackerCoreData.schedule as? [Weekday] ?? []
+
+        return Tracker(id: id, title: title, color: color, emoji: emoji, schedule: schedule)
+    }
+
+    /// Получает сущность `TrackerCoreData` по идентификатору.
+    private func fetchTrackerCoreData(by id: UUID) -> TrackerCoreData? {
+        let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        do {
+            let trackers = try context.fetch(fetchRequest)
+            return trackers.first
+        } catch {
+            print("Failed to fetch tracker by ID: \(error)")
+            return nil
+        }
+    }
+
+    /// Получает существующую категорию или создаёт новую, если она не найдена.
     private func fetchOrCreateCategory(with title: String) -> TrackerCategoryCoreData {
         if let existingCategory = fetchCategory(with: title) {
             return existingCategory
@@ -109,6 +140,7 @@ extension TrackerCategoryStore {
         }
     }
 
+    /// Получает категорию по названию.
     private func fetchCategory(with title: String) -> TrackerCategoryCoreData? {
         let fetchRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         fetchRequest.predicate = NSPredicate(format: "title == %@", title)
@@ -121,11 +153,12 @@ extension TrackerCategoryStore {
         }
     }
 
+    /// Создаёт новую сущность `TrackerCategoryCoreData`.
     private func createCategoryEntity(with title: String) -> TrackerCategoryCoreData {
         let entity = NSEntityDescription.entity(forEntityName: "TrackerCategoryCoreData", in: context)!
         let newCategory = TrackerCategoryCoreData(entity: entity, insertInto: context)
         newCategory.title = title
-        newCategory.trackers = NSSet(array: [])
+        newCategory.trackers = NSSet()
         return newCategory
     }
 }

@@ -10,38 +10,43 @@ import CoreData
 import UIKit
 
 final class TrackerStore {
-    
+    // MARK: - Properties
+
     private let context: NSManagedObjectContext
-    
+
+    // MARK: - Initializers
+
     convenience init() {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         self.init(context: context)
     }
-    
+
     init(context: NSManagedObjectContext) {
         self.context = context
     }
-    
-    public func addNewTracker(_ tracker: Tracker) throws {
+
+    // MARK: - Public Methods
+
+    internal func addNewTracker(_ tracker: Tracker) throws {
         guard let trackerEntity = NSEntityDescription.entity(forEntityName: "TrackerCoreData", in: context) else {
             throw NSError(domain: "TrackerStore", code: 1, userInfo: [NSLocalizedDescriptionKey: "Unable to find entity description"])
         }
-        
+
         let newTracker = TrackerCoreData(entity: trackerEntity, insertInto: context)
         newTracker.id = tracker.id
         newTracker.title = tracker.title
         newTracker.color = UIColorMarshalling.hexString(from: tracker.color)
         newTracker.emoji = tracker.emoji
         newTracker.schedule = tracker.schedule as NSArray?
-        
+
         do {
             try context.save()
         } catch {
             throw error
         }
     }
-    
-    public func fetchTrackers() -> [Tracker] {
+
+    internal func fetchTrackers() -> [Tracker] {
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         do {
             let trackerCoreDataArray = try context.fetch(fetchRequest)
@@ -52,23 +57,24 @@ final class TrackerStore {
             return []
         }
     }
-    
-    internal func decodingTracker(from trackerCoreData: TrackerCoreData) -> Tracker? {
+}
+
+ // MARK: - Private Methods
+
+extension TrackerStore {
+    private func decodingTracker(from trackerCoreData: TrackerCoreData) -> Tracker? {
         guard let id = trackerCoreData.id,
               let title = trackerCoreData.title,
               let colorHex = trackerCoreData.color,
               let emoji = trackerCoreData.emoji else { return nil }
-        
+
         let color = UIColorMarshalling.color(from: colorHex)
         let schedule = trackerCoreData.schedule as? [Weekday] ?? []
-        
+
         return Tracker(id: id, title: title, color: color, emoji: emoji, schedule: schedule)
     }
-}
 
-extension TrackerStore {
-    
-    func fetchTrackerCoreData(by id: UUID) -> TrackerCoreData? {
+    private func fetchTrackerCoreData(by id: UUID) -> TrackerCoreData? {
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         do {
