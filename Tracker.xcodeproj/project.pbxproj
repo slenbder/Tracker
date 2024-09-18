@@ -70,7 +70,7 @@
 		4F677A0A2C9AFB750089A340 /* OnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewController.swift; sourceTree = "<group>"; };
 		4F677A0C2C9AFB8E0089A340 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		4F677A0E2C9AFC200089A340 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
-		4F677A102C9B03590089A340 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4F677A122C9B07ED0089A340 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F72614B2C48040D004594B6 /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		4F72614D2C48042F004594B6 /* CreateNewIrregularEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewIrregularEventViewController.swift; sourceTree = "<group>"; };
 		4F72614F2C480487004594B6 /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
@@ -161,6 +161,7 @@
 				4F7261482C48039A004594B6 /* TrackerModels */,
 				4F7647992C82FD1A00E77313 /* CoreData */,
 				4FCA65BA2C8364DA009DCCB8 /* TrackerThings */,
+				4F677A122C9B07ED0089A340 /* Info.plist */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -257,7 +258,6 @@
 				4FE37B0F2C2EFDC80080C748 /* Assets.xcassets */,
 				4FE37B112C2EFDC80080C748 /* LaunchScreen.storyboard */,
 				4F2D89C82C91B92000E6464B /* Tracker.xcdatamodeld */,
-				4F677A102C9B03590089A340 /* Info.plist */,
 			);
 			path = TrackerThings;
 			sourceTree = "<group>";
