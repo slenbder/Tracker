@@ -16,12 +16,12 @@ protocol CategoryViewControllerDelegate: AnyObject {
 
 // MARK: - CategoryViewController
 
-class CategoryViewController: UIViewController {
+final class CategoryViewController: UIViewController, NewCategoryViewControllerDelegate {
     
     // MARK: - Properties
     
     weak var delegate: CategoryViewControllerDelegate?
-    var trackerVC = TrackerViewController()
+    private var viewModel: CategoryViewModel!
     
     private let tableView = UITableView()
     private let stackView = UIStackView()
@@ -32,21 +32,38 @@ class CategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Категория"
-        backGround()
-        setupCategoryView()
-        addButton()
-        mainScreenContent()
+        setupUI()
+        setupViewModel()
+        setupBindings()
+        loadCategories()
     }
     
     // MARK: - Setup UI
     
-    private func backGround() {
+    private func setupUI() {
         view.backgroundColor = .ypWhite
+        setupCategoryView()
+        addButton()
+        setupTableView()
+    }
+    
+    private func setupViewModel() {
+        viewModel = CategoryViewModel(store: TrackerCategoryStore())
+    }
+    
+    private func setupBindings() {
+        viewModel.onCategoriesChanged = { [weak self] categories in
+            self?.tableView.reloadData()
+            self?.mainScreenContent()
+        }
+        
+        viewModel.onCategorySelected = { [weak self] category in
+            guard let self = self else { return }
+            self.delegate?.categoryScreen(self, didSelectedCategory: category)
+        }
     }
     
     private func setupCategoryView() {
-        navigationItem.hidesBackButton = true
-        
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.alignment = .center
@@ -82,25 +99,11 @@ class CategoryViewController: UIViewController {
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypWhite, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(addCategory), for: .touchUpInside)
         view.addSubview(button)
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.layer.cornerRadius = 16
-        tableView.rowHeight = 75
-        tableView.isScrollEnabled = false
-        tableView.showsVerticalScrollIndicator = false
-        tableView.backgroundColor = .ypBackground
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(tableView)
+        button.addTarget(self, action: #selector(addCategory), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-            tableView.heightAnchor.constraint(equalToConstant: 75),
-            
             button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             button.heightAnchor.constraint(equalToConstant: 60),
@@ -108,50 +111,71 @@ class CategoryViewController: UIViewController {
         ])
     }
     
+    private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.layer.cornerRadius = 16
+        tableView.rowHeight = 75
+        tableView.isScrollEnabled = true
+        tableView.showsVerticalScrollIndicator = false
+        tableView.backgroundColor = .ypWhite
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(CategoryTableViewCell.self, forCellReuseIdentifier: CategoryTableViewCell.reuseIdentifier)
+        view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            tableView.bottomAnchor.constraint(equalTo: button.topAnchor, constant: -16)
+        ])
+    }
+    
+    func newCategoryScreen(_ screen: NewCategoryViewController, didAddCategoryWithTitle title: String) {
+        viewModel.addCategory(title: title)
+    }
+    
+    private func loadCategories() {
+        viewModel.loadCategories()
+    }
+    
     private func mainScreenContent() {
-        let isCategoryEmpty = trackerVC.checkIsCategoryEmpty()
-        tableView.isHidden = isCategoryEmpty
-        stackView.isHidden = !isCategoryEmpty
-        tableView.reloadData()
+        if viewModel.numberOfCategories() == 0 {
+            tableView.isHidden = true
+            stackView.isHidden = false
+        } else {
+            tableView.isHidden = false
+            stackView.isHidden = true
+        }
     }
     
     // MARK: - Actions
     
-    @objc func addCategory() {
-        print("Add Category")
-        let addNewCategory = NewCategoryViewController()
-        navigationController?.pushViewController(addNewCategory, animated: true)
+    @objc private func addCategory() {
+        let addNewCategoryVC = NewCategoryViewController()
+        addNewCategoryVC.delegate = self
+        navigationController?.pushViewController(addNewCategoryVC, animated: true)
     }
 }
 
-// MARK: - UITableViewDelegate
-
-extension CategoryViewController: UITableViewDelegate {}
-
 // MARK: - UITableViewDataSource
 
-extension CategoryViewController: UITableViewDataSource {
+extension CategoryViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return trackerVC.categories.count
+        return viewModel.numberOfCategories()
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-        cell.textLabel?.text = trackerVC.categories[indexPath.row].title.rawValue
-        cell.selectionStyle = .none
-        cell.backgroundColor = .ypBackground
+        let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.reuseIdentifier, for: indexPath) as! CategoryTableViewCell
+        let category = viewModel.category(at: indexPath.row)
+        cell.configure(with: category)
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        delegate?.categoryScreen(self, didSelectedCategory: trackerVC.categories[indexPath.row])
+        viewModel.selectCategory(at: indexPath.row)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.dismiss(animated: true)
         }
-    }
-    
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        tableView.cellForRow(at: indexPath)?.accessoryType = .none
     }
 }

@@ -10,7 +10,7 @@ import UIKit
 // MARK: - NewHabitVCDelegate
 
 protocol NewHabitVCDelegate: AnyObject {
-    func didCreateNewHabit(_ tracker: Tracker)
+    func didCreateNewHabit(_ tracker: Tracker, _ category: String)
 }
 
 // MARK: - NewHabitVC
@@ -282,7 +282,7 @@ class NewHabitVC: UIViewController {
                                  schedule: selectedSchedule)
         
         self.trackerVC.createNewTracker(tracker: newTracker)
-        self.delegate?.didCreateNewHabit(newTracker)
+        self.delegate?.didCreateNewHabit(newTracker, selectedCategory?.title ?? "")
         self.dismiss(animated: true)
     }
 }
@@ -302,7 +302,7 @@ extension NewHabitVC : UITableViewDelegate, UITableViewDataSource {
         let item = "\(tableList[indexPath.row])"
         cell.textLabel?.text = item
         if item == "Категория" {
-            cell.detailTextLabel?.text = selectedCategory?.title.rawValue
+            cell.detailTextLabel?.text = selectedCategory?.title
             cell.detailTextLabel?.textColor = .ypGray
             cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .medium)
         }

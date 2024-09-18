@@ -8,19 +8,26 @@
 import Foundation
 import UIKit
 
+// MARK: - NewCategoryViewControllerDelegate
+
+protocol NewCategoryViewControllerDelegate: AnyObject {
+    func newCategoryScreen(_ screen: NewCategoryViewController, didAddCategoryWithTitle title: String)
+}
+
 // MARK: - NewCategoryViewController
 
 class NewCategoryViewController: UIViewController {
     
     // MARK: - Properties
     
-    private let textField = UITextField()
+    weak var delegate: NewCategoryViewControllerDelegate?
+    let textField = UITextField()
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Категория"
+        title = "Новая категория"
         backGround()
         setupCategoryView()
         addButton()
@@ -33,14 +40,14 @@ class NewCategoryViewController: UIViewController {
     }
     
     private func setupCategoryView() {
-        title = "Новая категория"
         textField.backgroundColor = .ypBackground
-        textField.textColor = .ypGray
+        textField.textColor = .ypBlack
         textField.placeholder = "Введите название категории"
-        
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
+        let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         textField.leftView = paddingView
         textField.leftViewMode = .always
+        textField.rightView = paddingView
+        textField.rightViewMode = .always
         textField.layer.cornerRadius = 16
         textField.layer.masksToBounds = true
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -48,13 +55,10 @@ class NewCategoryViewController: UIViewController {
         
         view.addSubview(textField)
         
-        NSLayoutConstraint.activate([
-            textField.heightAnchor.constraint(equalToConstant: 75),
-            textField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            textField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            textField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-            textField.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
+        textField.heightAnchor.constraint(equalToConstant: 75).isActive = true
+        textField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
+        textField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
+        textField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24).isActive = true
     }
     
     private func addButton() {
@@ -66,22 +70,24 @@ class NewCategoryViewController: UIViewController {
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypWhite, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(addNewCategory), for: .touchUpInside)
         
         view.addSubview(button)
         
-        NSLayoutConstraint.activate([
-            button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            button.heightAnchor.constraint(equalToConstant: 60),
-            button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
-        ])
+        button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
+        button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
+        
+        button.addTarget(self, action: #selector(addNewCategory), for: .touchUpInside)
     }
     
     // MARK: - Actions
     
     @objc private func addNewCategory() {
-        print("Add New Category")
+        guard let categoryTitle = textField.text, !categoryTitle.isEmpty else {
+            return
+        }
+        delegate?.newCategoryScreen(self, didAddCategoryWithTitle: categoryTitle)
         navigationController?.popViewController(animated: true)
     }
 }

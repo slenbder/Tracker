@@ -10,7 +10,7 @@ import UIKit
 // MARK: - CreateTrackerDelegate
 
 protocol CreateTrackerDelegate: AnyObject {
-    func didDelegateNewTracker(_ tracker: Tracker)
+    func didDelegateNewTracker(_ tracker: Tracker, _ category: String)
 }
 
 // MARK: - DismissProtocol
@@ -101,8 +101,8 @@ final class CreateTrackerViewController: UIViewController {
 // MARK: - NewHabitVCDelegate
 
 extension CreateTrackerViewController: NewHabitVCDelegate {
-    func didCreateNewHabit(_ tracker: Tracker) {
-        habitDelegate?.didDelegateNewTracker(tracker)
+    func didCreateNewHabit(_ tracker: Tracker, _ category: String) {
+        habitDelegate?.didDelegateNewTracker(tracker, category)
         dismissDelegate?.dismissView()
     }
 }
@@ -110,8 +110,8 @@ extension CreateTrackerViewController: NewHabitVCDelegate {
 // MARK: - CreateNewIrregularEventViewControllerDelegate
 
 extension CreateTrackerViewController: CreateNewIrregularEventViewControllerDelegate {
-    func didCreateNewEvent(_ tracker: Tracker) {
-        eventDelegate?.didDelegateNewTracker(tracker)
+    func didCreateNewEvent(_ tracker: Tracker, _ category: String) {
+        eventDelegate?.didDelegateNewTracker(tracker, category)
         dismissDelegate?.dismissView()
     }
 }

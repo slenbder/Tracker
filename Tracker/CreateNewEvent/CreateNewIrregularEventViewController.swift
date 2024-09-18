@@ -10,7 +10,7 @@ import UIKit
 // MARK: - CreateNewIrregularEventViewControllerDelegate
 
 protocol CreateNewIrregularEventViewControllerDelegate: AnyObject {
-    func didCreateNewEvent(_ tracker: Tracker)
+    func didCreateNewEvent(_ tracker: Tracker, _ category: String)
 }
 
 // MARK: - CreateNewIrregularEventViewController
@@ -297,7 +297,7 @@ class CreateNewIrregularEventViewController: UIViewController {
                                             Weekday.sunday])
         
         self.trackerVC.createNewTracker(tracker: newTracker)
-        self.delegate?.didCreateNewEvent(newTracker)
+        self.delegate?.didCreateNewEvent(newTracker, selectedCategory?.title ?? "")
         self.dismiss(animated: true)
     }
 }
@@ -314,7 +314,7 @@ extension CreateNewIrregularEventViewController: UITableViewDelegate, UITableVie
         cell.accessoryType = .disclosureIndicator
         cell.backgroundColor = .ypBackground
         cell.textLabel?.text = tableList[indexPath.row]
-        cell.detailTextLabel?.text = selectedCategory?.title.rawValue
+        cell.detailTextLabel?.text = selectedCategory?.title
         cell.detailTextLabel?.textColor = .ypGray
         cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .medium)
         return cell
