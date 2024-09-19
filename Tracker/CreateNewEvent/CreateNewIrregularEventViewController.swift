@@ -15,7 +15,7 @@ protocol CreateNewIrregularEventViewControllerDelegate: AnyObject {
 
 // MARK: - CreateNewIrregularEventViewController
 
-class CreateNewIrregularEventViewController: UIViewController {
+final class CreateNewIrregularEventViewController: UIViewController {
     
     // MARK: - Properties
     

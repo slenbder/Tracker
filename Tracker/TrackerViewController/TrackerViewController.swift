@@ -74,6 +74,7 @@ final class TrackerViewController: UIViewController{
         if !storedCategories.isEmpty {
             categories = storedCategories
         } else {
+            
             if !storedTrackers.isEmpty {
                 if let firstCategory = categories.first {
                     let updatedCategory = TrackerCategory(title: firstCategory.title, trackers: storedTrackers)
@@ -90,6 +91,8 @@ final class TrackerViewController: UIViewController{
         showTrackersInDate(currentDate)
         
         collectionView.reloadData()
+        
+        reloadHolders()
     }
     
     // MARK: - Tracker Management
@@ -311,17 +314,20 @@ final class TrackerViewController: UIViewController{
 
 extension TrackerViewController: CreateTrackerDelegate {
     func didDelegateNewTracker(_ tracker: Tracker, _ category: String) {
-            print("didCreateNewHabit asked")
-            createNewTracker(tracker: tracker)
-
-            do {
-                try trackerStore.addNewTracker(tracker)
-                try trackerCategoryStore.createCategoryAndTracker(tracker: tracker, with: category)
-                loadTrackersFromCoreData()
-            } catch {
-                print("Failed to save tracker: \(error)")
-            }
+        print("didCreateNewHabit asked")
+        createNewTracker(tracker: tracker)
+        
+        do {
+            try trackerStore.addNewTracker(tracker)
+            try trackerCategoryStore.createCategoryAndTracker(tracker: tracker, with: category)
+            loadTrackersFromCoreData()
+        } catch {
+            print("Failed to save tracker: \(error)")
+            
         }
+        
+        loadTrackersFromCoreData()
+    }
 }
 
 //MARK: - UICollectionViewDataSource

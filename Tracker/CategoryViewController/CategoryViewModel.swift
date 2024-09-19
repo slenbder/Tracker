@@ -9,6 +9,8 @@ import Foundation
 
 final class CategoryViewModel {
     
+    // MARK: - Properties
+    
     private let trackerCategoryStore: TrackerCategoryStore
     private var categories: [TrackerCategory] = [] {
         didSet {
@@ -19,11 +21,15 @@ final class CategoryViewModel {
     var onCategoriesChanged: (([TrackerCategory]) -> Void)?
     var onCategorySelected: ((TrackerCategory) -> Void)?
     
+    // MARK: - Initializer
+    
     init(store: TrackerCategoryStore) {
         self.trackerCategoryStore = store
         self.trackerCategoryStore.delegate = self
         loadCategories()
     }
+    
+    // MARK: - Public Methods
     
     func loadCategories() {
         categories = trackerCategoryStore.fetchAllCategories()
@@ -49,8 +55,11 @@ final class CategoryViewModel {
     }
 }
 
+// MARK: - TrackerCategoryStoreDelegate
+
 extension CategoryViewModel: TrackerCategoryStoreDelegate {
     func didUpdateData(in store: TrackerCategoryStore) {
         loadCategories()
     }
 }
+
