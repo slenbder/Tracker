@@ -164,14 +164,17 @@ extension CategoryViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfCategories()
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.reuseIdentifier, for: indexPath) as! CategoryTableViewCell
-        let category = viewModel.category(at: indexPath.row)
-        cell.configure(with: category)
-        return cell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.reuseIdentifier, for: indexPath) as? CategoryTableViewCell {
+            let category = viewModel.category(at: indexPath.row)
+            cell.configure(with: category)
+            return cell
+        } else {
+            return UITableViewCell()
+        }
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.selectCategory(at: indexPath.row)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {

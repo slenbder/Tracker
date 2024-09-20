@@ -45,7 +45,7 @@ final class OnboardingPageViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)
 
-        label.font = .systemFont(ofSize: 24, weight: .bold)
+        label.font = .systemFont(ofSize: 32, weight: .bold)
         label.textColor = .black
         label.textAlignment = .center
         label.numberOfLines = 0

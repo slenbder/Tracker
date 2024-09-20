@@ -8,11 +8,10 @@
 import Foundation
 import UIKit
 
-final class OnboardingViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+final class OnboardingViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     // MARK: - Properties
     
-    private let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     private let pageControl = UIPageControl()
     private var pages = [UIViewController]()
     
@@ -20,9 +19,11 @@ final class OnboardingViewController: UIViewController, UIPageViewControllerData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        dataSource = self
+        delegate = self
         setupPages()
-        setupPageViewController()
         setupPageControl()
+        setInitialViewController()
     }
     
     // MARK: - Private Methods
@@ -33,21 +34,10 @@ final class OnboardingViewController: UIViewController, UIPageViewControllerData
         pages = [page1, page2]
     }
     
-    private func setupPageViewController() {
-        pageViewController.dataSource = self
-        pageViewController.delegate = self
-        addChild(pageViewController)
-        view.addSubview(pageViewController.view)
-        pageViewController.didMove(toParent: self)
-        
-        pageViewController.setViewControllers([pages[0]], direction: .forward, animated: true, completion: nil)
-        pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            pageViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            pageViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            pageViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            pageViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+    private func setInitialViewController() {
+        if let firstPage = pages.first {
+            setViewControllers([firstPage], direction: .forward, animated: true, completion: nil)
+        }
     }
     
     private func setupPageControl() {
@@ -85,7 +75,7 @@ final class OnboardingViewController: UIViewController, UIPageViewControllerData
     
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool,
                             previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        if completed, let currentViewController = pageViewController.viewControllers?.first,
+        if completed, let currentViewController = viewControllers?.first,
            let currentIndex = pages.firstIndex(of: currentViewController) {
             pageControl.currentPage = currentIndex
         }
