@@ -10,16 +10,18 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
-
+    
     // MARK: - UIScene Lifecycle
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Проверяем, является ли переданная сцена типа UIWindowScene
         guard let windowScene = (scene as? UIWindowScene) else { return }
-
-        // Создаем окно и назначаем корневой контроллер
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = TabBarController()  // Замените TabBarController на свой корневой ViewController, если требуется
+        let hasSeenOnboarding = UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
+        if hasSeenOnboarding {
+            window?.rootViewController = TabBarController()
+        } else {
+            window?.rootViewController = OnboardingViewController()
+        }
         window?.makeKeyAndVisible()
     }
     

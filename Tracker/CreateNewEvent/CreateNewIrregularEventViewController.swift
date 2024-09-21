@@ -1,5 +1,5 @@
 //
-//  CreateNewHabitVC.swift
+//  CreateNewEventViewController.swift
 //  Tracker
 //
 //  Created by Кирилл Марьясов on 17.07.2024.
@@ -7,30 +7,31 @@
 
 import UIKit
 
-// MARK: - NewHabitVCDelegate
+// MARK: - CreateNewIrregularEventViewControllerDelegate
 
-protocol NewHabitVCDelegate: AnyObject {
-    func didCreateNewHabit(_ tracker: Tracker)
+protocol CreateNewIrregularEventViewControllerDelegate: AnyObject {
+    func didCreateNewEvent(_ tracker: Tracker, _ category: String)
 }
 
-// MARK: - NewHabitVC
+// MARK: - CreateNewIrregularEventViewController
 
-class NewHabitVC: UIViewController {
+final class CreateNewIrregularEventViewController: UIViewController {
     
     // MARK: - Properties
     
-    weak var delegate: NewHabitVCDelegate?
+    weak var delegate: CreateNewIrregularEventViewControllerDelegate?
     weak var dismissDelegate: DismissProtocol?
     var trackerVC = TrackerViewController()
     
-    private var selectedCategory: TrackerCategory?
-    private var selectedSchedule: [Weekday] = []
-    private var enteredEventName = ""
+    private var selectedCategory : TrackerCategory?
     private var selectedEmoji: String?
     private var selectedColor: UIColor?
+    private var enteredTrackerName = ""
     
-    let tableView = UITableView()
+    let textField = UITextField()
+    let stackView = UIStackView()
     let createButton = UIButton()
+    let tableView = UITableView()
     let cancelButton = UIButton()
     
     let emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -38,9 +39,8 @@ class NewHabitVC: UIViewController {
     
     let scrollView = UIScrollView()
     let contentView = UIView()
-    let textField = UITextField()
     
-    let tableList = ["Категория", "Расписание"]
+    let tableList = ["Категория"]
     let emojiList = ["😊", "😍", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🤖", "🤔", "🙏", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😴"]
     let colorList: [UIColor] = {
         var colors = [UIColor]()
@@ -56,16 +56,17 @@ class NewHabitVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Новая привычка"
+        title = "Новое нерегулярное событие"
         backGround()
-        setupScrollView()
-        setupHabitView()
-        setupEmojiCollectionView()
-        setupColorCollectionView()
+        setupEventView()
+        setupStackView()
         setupCancelButton()
         setupCreateButton()
+        setupEmojiCollectionView()
+        setupColorCollectionView()
         createTable()
         setupConstraint()
+        setupScrollView()
     }
     
     // MARK: - Setup UI
@@ -94,22 +95,30 @@ class NewHabitVC: UIViewController {
         ])
     }
     
-    private func setupHabitView() {
+    private func setupEventView() {
         textField.backgroundColor = .ypBackground
         textField.textColor = .ypBlack
         textField.placeholder = "Введите название трекера"
-        let paddingView: UIView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
+        let paddingView : UIView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         textField.leftView = paddingView
         textField.leftViewMode = .always
         textField.rightView = paddingView
         textField.rightViewMode = .always
-        textField.leftViewMode = .always
         textField.layer.cornerRadius = 16
         textField.layer.masksToBounds = true
         textField.delegate = self
         textField.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(textField)
+    }
+    
+    private func setupStackView() {
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 8
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.addSubview(stackView)
     }
     
     private func setupCancelButton() {
@@ -119,11 +128,11 @@ class NewHabitVC: UIViewController {
         cancelButton.backgroundColor = .clear
         cancelButton.layer.borderColor = UIColor.ypRed.cgColor
         cancelButton.layer.borderWidth = 1
-        cancelButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
+        cancelButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         cancelButton.setTitleColor(.ypRed, for: .normal)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         
-        contentView.addSubview(cancelButton)
+        stackView.addArrangedSubview(cancelButton)
         
         cancelButton.addTarget(self, action: #selector(cancel), for: .touchUpInside)
     }
@@ -132,29 +141,15 @@ class NewHabitVC: UIViewController {
         createButton.setTitle("Создать", for: .normal)
         createButton.layer.cornerRadius = 16
         createButton.layer.masksToBounds = true
-        createButton.backgroundColor = .ypGray
         createButton.isEnabled = false
-        createButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
+        createButton.backgroundColor = .ypGray
+        createButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         createButton.setTitleColor(.ypWhite, for: .normal)
         createButton.translatesAutoresizingMaskIntoConstraints = false
         
-        contentView.addSubview(createButton)
+        stackView.addArrangedSubview(createButton)
         
         createButton.addTarget(self, action: #selector(create), for: .touchUpInside)
-    }
-    
-    private func createTable() {
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.layer.cornerRadius = 16
-        tableView.separatorStyle = .singleLine
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        tableView.rowHeight = 76
-        tableView.backgroundColor = .ypBackground
-        tableView.isScrollEnabled = false
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        contentView.addSubview(tableView)
     }
     
     private func setupEmojiCollectionView() {
@@ -177,7 +172,6 @@ class NewHabitVC: UIViewController {
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(top: 10, left: 6, bottom: 0, right: 5)
         
-        
         colorCollectionView.collectionViewLayout = layout
         colorCollectionView.dataSource = self
         colorCollectionView.delegate = self
@@ -188,6 +182,7 @@ class NewHabitVC: UIViewController {
         
         contentView.addSubview(colorCollectionView)
     }
+    
     
     private func setupConstraint() {
         let emojiLabel = UILabel()
@@ -254,8 +249,22 @@ class NewHabitVC: UIViewController {
         return CGFloat(rows) * itemHeight
     }
     
+    private func createTable() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.layer.cornerRadius = 16
+        tableView.separatorStyle = .singleLine
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        tableView.rowHeight = 76
+        tableView.backgroundColor = .ypBackground
+        tableView.isScrollEnabled = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.addSubview(tableView)
+    }
+    
     func checkCreateButtonValidation() {
-        if selectedCategory != nil && !enteredEventName.isEmpty && selectedEmoji != nil && selectedColor != nil {
+        if selectedCategory != nil && !enteredTrackerName.isEmpty && selectedEmoji != nil && selectedColor != nil {
             createButton.isEnabled = true
             createButton.backgroundColor = .ypBlack
             createButton.setTitleColor(.ypWhite, for: .normal)
@@ -268,127 +277,64 @@ class NewHabitVC: UIViewController {
     
     // MARK: - Actions
     
-    @objc func cancel(_ sender: UIButton) {
+    @objc func cancel() {
         print("Cancel")
         dismiss(animated: true)
     }
     
-    @objc func create() {
+    @objc func create(_ sender: UIButton) {
         print("Create")
         let newTracker = Tracker(id: UUID(),
-                                 title: enteredEventName,
+                                 title: enteredTrackerName,
                                  color: selectedColor ?? .cSelection1,
                                  emoji: selectedEmoji ?? "🤔",
-                                 schedule: selectedSchedule)
+                                 schedule: [Weekday.monday,
+                                            Weekday.tuesday,
+                                            Weekday.wednesday,
+                                            Weekday.thursday,
+                                            Weekday.friday,
+                                            Weekday.saturday,
+                                            Weekday.sunday])
         
         self.trackerVC.createNewTracker(tracker: newTracker)
-        self.delegate?.didCreateNewHabit(newTracker)
+        self.delegate?.didCreateNewEvent(newTracker, selectedCategory?.title ?? "")
         self.dismiss(animated: true)
     }
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 
-extension NewHabitVC : UITableViewDelegate, UITableViewDataSource {
+extension CreateNewIrregularEventViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         cell.accessoryType = .disclosureIndicator
         cell.backgroundColor = .ypBackground
-        let item = "\(tableList[indexPath.row])"
-        cell.textLabel?.text = item
-        if item == "Категория" {
-            cell.detailTextLabel?.text = selectedCategory?.title.rawValue
-            cell.detailTextLabel?.textColor = .ypGray
-            cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .medium)
-        }
-        if item == "Расписание" {
-            var text : [String] = []
-            for day in selectedSchedule {
-                text.append(day.rawValue)
-            }
-            cell.detailTextLabel?.text = text.joined(separator: ", ")
-            cell.detailTextLabel?.textColor = .ypGray
-            cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .medium)
-        }
-        
+        cell.textLabel?.text = tableList[indexPath.row]
+        cell.detailTextLabel?.text = selectedCategory?.title
+        cell.detailTextLabel?.textColor = .ypGray
+        cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .medium)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
         let selectedItem = tableList[indexPath.row]
-        
         if selectedItem == "Категория" {
             let categoryViewController = CategoryViewController()
             categoryViewController.delegate = self
             let navigatonVC = UINavigationController(rootViewController: categoryViewController)
             present(navigatonVC, animated: true)
         }
-        
-        if selectedItem == "Расписание" {
-            let scheduleVC = ScheduleViewController()
-            scheduleVC.delegate = self
-            navigationController?.pushViewController(scheduleVC, animated: true)
-        }
-    }
-}
-
-// MARK: - UITextFieldDelegate
-
-extension NewHabitVC: UITextFieldDelegate {
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if textField.text != "" {
-            return true
-        } else {
-            textField.placeholder = "Название не может быть пустым"
-            return false
-        }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.endEditing(true)
-        enteredEventName = textField.text ?? ""
-        checkCreateButtonValidation()
-        return true
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        enteredEventName = (textField.text as NSString?)?.replacingCharacters(in: range, with: string) ?? ""
-        checkCreateButtonValidation()
-        return true
-    }
-}
-
-// MARK: - CategoryViewControllerDelegate
-
-extension NewHabitVC: CategoryViewControllerDelegate {
-    func categoryScreen(_ screen: CategoryViewController, didSelectedCategory category: TrackerCategory) {
-        selectedCategory = category
-        checkCreateButtonValidation()
-        tableView.reloadData()
-    }
-}
-
-// MARK: - SelectedScheduleDelegate
-
-extension NewHabitVC: SelectedScheduleDelegate {
-    func selectScheduleScreen(_ screen: ScheduleViewController, didSelectedDays schedule: [Weekday]) {
-        selectedSchedule = schedule
-        checkCreateButtonValidation()
-        tableView.reloadData()
     }
 }
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 
-extension NewHabitVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension CreateNewIrregularEventViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == emojiCollectionView {
@@ -446,3 +392,39 @@ extension NewHabitVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
     }
 }
 
+// MARK: - UITextFieldDelegate
+
+extension CreateNewIrregularEventViewController: UITextFieldDelegate {
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        if textField.text != "" {
+            return true
+        } else {
+            textField.placeholder = "Название не может быть пустым"
+            return false
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        enteredTrackerName = textField.text ?? ""
+        checkCreateButtonValidation()
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        enteredTrackerName = (textField.text as NSString?)?.replacingCharacters(in: range, with: string) ?? ""
+        checkCreateButtonValidation()
+        return true
+    }
+}
+
+// MARK: - CategoryViewControllerDelegate
+
+extension CreateNewIrregularEventViewController: CategoryViewControllerDelegate {
+    func categoryScreen(_ screen: CategoryViewController, didSelectedCategory category: TrackerCategory) {
+        selectedCategory = category
+        tableView.reloadData()
+        checkCreateButtonValidation()
+    }
+}
