@@ -23,11 +23,12 @@ class NewHabitVC: UIViewController {
     weak var dismissDelegate: DismissProtocol?
     var trackerVC = TrackerViewController()
     
-    private var selectedCategory: TrackerCategory?
-    private var selectedSchedule: [Weekday] = []
-    private var enteredEventName = ""
-    private var selectedEmoji: String?
-    private var selectedColor: UIColor?
+    var selectedCategory: TrackerCategory?
+    var selectedSchedule: [Weekday] = []
+    var enteredEventName = ""
+    var selectedEmoji: String?
+    var selectedColor: UIColor?
+    var trackerToEdit: Tracker?
     
     let tableView = UITableView()
     let createButton = UIButton()
@@ -56,7 +57,18 @@ class NewHabitVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Новая привычка"
+        
+        if let trackerToEdit = trackerToEdit {
+            enteredEventName = trackerToEdit.title
+            selectedColor = trackerToEdit.color
+            selectedEmoji = trackerToEdit.emoji
+            selectedSchedule = trackerToEdit.schedule
+            selectedCategory = TrackerCategory(title: trackerToEdit.trackerCategory, trackers: [])
+            title = "Редактирование привычки"
+        } else {
+            title = "Новая привычка"
+        }
+        
         backGround()
         setupScrollView()
         setupHabitView()
@@ -113,7 +125,7 @@ class NewHabitVC: UIViewController {
     }
     
     private func setupCancelButton() {
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(localizedString(key:"cancelButton"), for: .normal)
         cancelButton.layer.cornerRadius = 16
         cancelButton.layer.masksToBounds = true
         cancelButton.backgroundColor = .clear
@@ -129,7 +141,9 @@ class NewHabitVC: UIViewController {
     }
     
     private func setupCreateButton() {
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(
+            trackerToEdit == nil ? localizedString(key:"addButton") : localizedString(key: "editButton"), for: .normal
+        )
         createButton.layer.cornerRadius = 16
         createButton.layer.masksToBounds = true
         createButton.backgroundColor = .ypGray
@@ -275,15 +289,28 @@ class NewHabitVC: UIViewController {
     
     @objc func create() {
         print("Create")
-        let newTracker = Tracker(id: UUID(),
-                                 title: enteredEventName,
-                                 color: selectedColor ?? .cSelection1,
-                                 emoji: selectedEmoji ?? "🤔",
-                                 schedule: selectedSchedule)
-        
-        self.trackerVC.createNewTracker(tracker: newTracker)
-        self.delegate?.didCreateNewHabit(newTracker, selectedCategory?.title ?? "")
-        self.dismiss(animated: true)
+        if let trackerToEdit = trackerToEdit {
+            let updatedTracker = Tracker(id: trackerToEdit.id,
+                                         title: enteredEventName,
+                                         color: selectedColor ?? .cSelection1,
+                                         emoji: selectedEmoji ?? "🤔",
+                                         schedule: selectedSchedule,
+                                         trackerCategory: selectedCategory?.title ?? "")
+            
+            self.trackerVC.updateTracker(tracker: updatedTracker)
+            self.dismiss(animated: true)
+        } else {
+            let newTracker = Tracker(id: UUID(),
+                                     title: enteredEventName,
+                                     color: selectedColor ?? .cSelection1,
+                                     emoji: selectedEmoji ?? "🤔",
+                                     schedule: selectedSchedule,
+                                     trackerCategory: selectedCategory?.title ?? "")
+            
+            self.trackerVC.createNewTracker(tracker: newTracker)
+            self.delegate?.didCreateNewHabit(newTracker, selectedCategory?.title ?? "")
+            self.dismiss(animated: true)
+        }
     }
 }
 

@@ -43,6 +43,7 @@
 		4F8079822CA06B170002F3CA /* CustomStatisticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8079812CA06B150002F3CA /* CustomStatisticView.swift */; };
 		4F8079842CA06B2B0002F3CA /* TrackerTextLable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8079832CA06B290002F3CA /* TrackerTextLable.swift */; };
 		4F8079872CA06FDC0002F3CA /* AnalyticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8079862CA06E7B0002F3CA /* AnalyticService.swift */; };
+		4FB23FA12CA324A500C5DF0D /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB23FA02CA324A300C5DF0D /* FilterViewController.swift */; };
 		4FDF8E872C304D2E00897652 /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF8E862C304D2E00897652 /* YS Display-Medium.ttf */; };
 		4FDF8E892C304F2E00897652 /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF8E882C304F2E00897652 /* YS Display-Bold.ttf */; };
 		4FE37B072C2EFDC70080C748 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE37B062C2EFDC70080C748 /* AppDelegate.swift */; };
@@ -113,6 +114,7 @@
 		4F8079812CA06B150002F3CA /* CustomStatisticView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStatisticView.swift; sourceTree = "<group>"; };
 		4F8079832CA06B290002F3CA /* TrackerTextLable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTextLable.swift; sourceTree = "<group>"; };
 		4F8079862CA06E7B0002F3CA /* AnalyticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticService.swift; sourceTree = "<group>"; };
+		4FB23FA02CA324A300C5DF0D /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		4FDF8E862C304D2E00897652 /* YS Display-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Medium.ttf"; sourceTree = "<group>"; };
 		4FDF8E882C304F2E00897652 /* YS Display-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Bold.ttf"; sourceTree = "<group>"; };
 		4FE37B032C2EFDC70080C748 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -194,6 +196,7 @@
 		4F677A082C999D2B0089A340 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				4FB23F9F2CA3248A00C5DF0D /* FilterViewController */,
 				4F8079852CA06DDD0002F3CA /* AnalyticService */,
 				4F677A5E2C9FEF770089A340 /* Localizable */,
 				4F677A092C99BBB00089A340 /* Onboarding */,
@@ -316,6 +319,14 @@
 				4F8079862CA06E7B0002F3CA /* AnalyticService.swift */,
 			);
 			path = AnalyticService;
+			sourceTree = "<group>";
+		};
+		4FB23F9F2CA3248A00C5DF0D /* FilterViewController */ = {
+			isa = PBXGroup;
+			children = (
+				4FB23FA02CA324A300C5DF0D /* FilterViewController.swift */,
+			);
+			path = FilterViewController;
 			sourceTree = "<group>";
 		};
 		4FCA65BA2C8364DA009DCCB8 /* TrackerThings */ = {
@@ -614,6 +625,7 @@
 				4F76479D2C82FD6800E77313 /* UIColorMarshalling.swift in Sources */,
 				4F677A0D2C9AFB910089A340 /* OnboardingViewController.swift in Sources */,
 				4F72615E2C480559004594B6 /* StatsViewController.swift in Sources */,
+				4FB23FA12CA324A500C5DF0D /* FilterViewController.swift in Sources */,
 				4F72614C2C48040D004594B6 /* ColorCell.swift in Sources */,
 				4F677A612C9FF0BB0089A340 /* NSLocalizedString.swift in Sources */,
 				4FE37B092C2EFDC70080C748 /* SceneDelegate.swift in Sources */,

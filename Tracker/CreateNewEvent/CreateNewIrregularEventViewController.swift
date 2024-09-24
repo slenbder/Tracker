@@ -122,7 +122,7 @@ final class CreateNewIrregularEventViewController: UIViewController {
     }
     
     private func setupCancelButton() {
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle("cancelButton", for: .normal)
         cancelButton.layer.cornerRadius = 16
         cancelButton.layer.masksToBounds = true
         cancelButton.backgroundColor = .clear
@@ -294,7 +294,8 @@ final class CreateNewIrregularEventViewController: UIViewController {
                                             Weekday.thursday,
                                             Weekday.friday,
                                             Weekday.saturday,
-                                            Weekday.sunday])
+                                            Weekday.sunday],
+                                 trackerCategory: selectedCategory?.title ?? "")
         
         self.trackerVC.createNewTracker(tracker: newTracker)
         self.delegate?.didCreateNewEvent(newTracker, selectedCategory?.title ?? "")
