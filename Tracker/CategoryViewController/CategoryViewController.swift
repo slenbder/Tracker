@@ -180,7 +180,10 @@ extension CategoryViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.reuseIdentifier, for: indexPath) as! CategoryTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.reuseIdentifier, for: indexPath) as? CategoryTableViewCell else {
+            return UITableViewCell()
+        }
+        
         let category = viewModel.category(at: indexPath.row)
         cell.configure(with: category)
         
@@ -211,8 +214,7 @@ extension CategoryViewController: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
-    
-    
+
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let totalRows = viewModel.numberOfCategories()
         
