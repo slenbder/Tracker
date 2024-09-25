@@ -78,6 +78,7 @@ class NewHabitVC: UIViewController {
         setupCreateButton()
         createTable()
         setupConstraint()
+        setupDismissKeyboardGesture()
     }
     
     // MARK: - Setup UI
@@ -262,6 +263,12 @@ class NewHabitVC: UIViewController {
         ])
     }
     
+    private func setupDismissKeyboardGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
     // MARK: - Helper Methods
     
     private func calculateCollectionViewHeight(for itemCount: Int, itemsPerRow: Int, itemHeight: CGFloat) -> CGFloat {
@@ -313,6 +320,11 @@ class NewHabitVC: UIViewController {
             self.dismiss(animated: true)
         }
     }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -332,7 +344,7 @@ extension NewHabitVC : UITableViewDelegate, UITableViewDataSource {
         if item == "Категория" {
             cell.detailTextLabel?.text = selectedCategory?.title
             cell.detailTextLabel?.textColor = .ypGray
-            cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .medium)
+            cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         }
         if item == "Расписание" {
             var text : [String] = []
@@ -341,7 +353,7 @@ extension NewHabitVC : UITableViewDelegate, UITableViewDataSource {
             }
             cell.detailTextLabel?.text = text.joined(separator: ", ")
             cell.detailTextLabel?.textColor = .ypGray
-            cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .medium)
+            cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         }
         
         return cell
@@ -372,12 +384,10 @@ extension NewHabitVC : UITableViewDelegate, UITableViewDataSource {
 extension NewHabitVC: UITextFieldDelegate {
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if textField.text != "" {
-            return true
-        } else {
+        if textField.text?.isEmpty == true {
             textField.placeholder = "Название не может быть пустым"
-            return false
         }
+        return true
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -393,6 +403,7 @@ extension NewHabitVC: UITextFieldDelegate {
         return true
     }
 }
+
 
 // MARK: - CategoryViewControllerDelegate
 

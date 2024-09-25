@@ -31,6 +31,7 @@ class NewCategoryViewController: UIViewController {
         backGround()
         setupCategoryView()
         addButton()
+        setupDismissKeyboardGesture()
     }
     
     // MARK: - Setup UI
@@ -81,6 +82,12 @@ class NewCategoryViewController: UIViewController {
         button.addTarget(self, action: #selector(addNewCategory), for: .touchUpInside)
     }
     
+    private func setupDismissKeyboardGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
     // MARK: - Actions
     
     @objc private func addNewCategory() {
@@ -89,5 +96,9 @@ class NewCategoryViewController: UIViewController {
         }
         delegate?.newCategoryScreen(self, didAddCategoryWithTitle: categoryTitle)
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

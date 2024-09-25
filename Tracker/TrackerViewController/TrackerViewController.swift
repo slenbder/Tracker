@@ -74,6 +74,7 @@ final class TrackerViewController: UIViewController{
         loadTrackersFromCoreData()
         mainScreenContent(currentDate)
         setupFilterButton()
+        setupDismissKeyboardGesture()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -297,6 +298,12 @@ final class TrackerViewController: UIViewController{
         }
     }
     
+    private func setupDismissKeyboardGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
     // MARK: - Actions
     
     @objc func plusButtonTapped() {
@@ -348,6 +355,10 @@ final class TrackerViewController: UIViewController{
         filterViewController.filterDelegate = self
         let filterNavController = UINavigationController(rootViewController: filterViewController)
         present(filterNavController, animated: true)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     // MARK: - Tracker Status Check
