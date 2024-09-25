@@ -200,7 +200,7 @@ final class TrackerViewController: UIViewController{
     }
     
     private func setupTrackerView() {
-        let plusButton = UIBarButtonItem(image: UIImage(named: "plus_button"), style: .plain, target: self, action: #selector(plusButtonTapped))
+        let plusButton = UIBarButtonItem(image: UIImage(named: "HeaderPlusButton"), style: .plain, target: self, action: #selector(plusButtonTapped))
         plusButton.tintColor = .ypBlack
         navigationItem.leftBarButtonItem = plusButton
         
@@ -216,7 +216,7 @@ final class TrackerViewController: UIViewController{
         view.addSubview(stackView)
         
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = UIImage(named: "tracker_stub")
+        image.image = UIImage(named: "TrackerMainScreenStar")
         stackView.addArrangedSubview(image)
         
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -266,7 +266,7 @@ final class TrackerViewController: UIViewController{
         filterButton.layer.cornerRadius = 16
         filterButton.layer.masksToBounds = true
         filterButton.backgroundColor = .ypBlue
-        filterButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+        filterButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
         filterButton.setTitleColor(.ypWhite, for: .normal)
         filterButton.setTitleColor(.white, for: .normal)
         filterButton.addTarget(self, action: #selector(filterButtonTap), for: .touchUpInside)

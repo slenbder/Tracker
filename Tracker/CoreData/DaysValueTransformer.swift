@@ -15,13 +15,12 @@ class DaysValueTransformer: ValueTransformer {
     
     // MARK: - ValueTransformer Overrides
     
-    
     override class func transformedValueClass() -> AnyClass {
-        NSData.self
+        return NSData.self
     }
     
     override class func allowsReverseTransformation() -> Bool {
-        true
+        return true
     }
     
     override func transformedValue(_ value: Any?) -> Any? {

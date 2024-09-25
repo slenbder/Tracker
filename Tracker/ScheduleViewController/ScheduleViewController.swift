@@ -5,7 +5,49 @@
 //  Created by Кирилл Марьясов on 17.07.2024.
 //
 
+import Foundation
 import UIKit
+
+// MARK: - Enum Weekday
+
+enum Weekday: String {
+    case monday = "Пн"
+    case tuesday = "Вт"
+    case wednesday = "Ср"
+    case thursday = "Чт"
+    case friday = "Пт"
+    case saturday = "Cб"
+    case sunday = "Вск"
+    
+    init(from date: Date) {
+        switch date.dayNumberOfWeek() {
+        case 1:
+            self = .sunday
+        case 2:
+            self = .monday
+        case 3:
+            self = .tuesday
+        case 4:
+            self = .wednesday
+        case 5:
+            self = .thursday
+        case 6:
+            self = .friday
+        case 7:
+            self = .saturday
+        default:
+            fatalError()
+        }
+    }
+}
+
+// MARK: - Date
+
+extension Date {
+    func dayNumberOfWeek() -> Int? {
+        return Calendar.current.dateComponents([.weekday], from: self).weekday
+    }
+}
 
 // MARK: - SelectedScheduleDelegate
 
@@ -21,36 +63,39 @@ class ScheduleViewController: UIViewController {
     
     weak var delegate: SelectedScheduleDelegate?
     
-    private let daysOfWeek: [Weekday] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
-    private let daysOfWeekUI = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
-    private var selectedDays: [Weekday] = []
+    let daysOfWeek : [Weekday] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
+    let daysOfWeekUI = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
     
-    private let tableView = UITableView()
+    var selectedDays: [Weekday] = []
+    
+    let tableView = UITableView()
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Расписание"
-        setupView()
-        setupTableView()
-        setupButton()
+        backGround()
+        setupCategoryView()
+        addButton()
     }
     
     // MARK: - Setup UI
     
-    private func setupView() {
+    private func backGround() {
         view.backgroundColor = .ypWhite
-        navigationItem.hidesBackButton = true
     }
     
-    private func setupTableView() {
+    private func setupCategoryView() {
+        navigationItem.hidesBackButton = true
         tableView.delegate = self
         tableView.dataSource = self
+        
         tableView.register(WeekDaysSelectCell.self, forCellReuseIdentifier: "WeekDaysSelectCell")
         tableView.rowHeight = 76
         tableView.separatorStyle = .singleLine
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        let tableCount : CGFloat = CGFloat(daysOfWeekUI.count)
         tableView.allowsSelection = false
         tableView.layer.cornerRadius = 16
         tableView.isScrollEnabled = false
@@ -58,15 +103,14 @@ class ScheduleViewController: UIViewController {
         
         view.addSubview(tableView)
         
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-            tableView.heightAnchor.constraint(equalToConstant: tableView.rowHeight * CGFloat(daysOfWeek.count))
-        ])
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
+        tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24).isActive = true
+        tableView.heightAnchor.constraint(equalToConstant: tableView.rowHeight * CGFloat(daysOfWeek.count)).isActive = true
+        
     }
     
-    private func setupButton() {
+    private func addButton() {
         let button = UIButton()
         button.setTitle("Готово", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -76,30 +120,29 @@ class ScheduleViewController: UIViewController {
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypWhite, for: .normal)
         
-        button.addTarget(self, action: #selector(doneButtonPressed), for: .touchUpInside)
-        
         view.addSubview(button)
         
-        NSLayoutConstraint.activate([
-            button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            button.heightAnchor.constraint(equalToConstant: 60),
-            button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
-        ])
+        button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
+        button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
+        
+        button.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
+        
+        button.addTarget(self, action: #selector(doneButton), for: .touchUpInside)
     }
     
     // MARK: - Actions
     
-    @objc private func doneButtonPressed(_ sender: UIButton) {
+    @objc func doneButton(_ sender: UIButton) {
         print("Done")
-        delegate?.selectScheduleScreen(self, didSelectedDays: selectedDays)
+        delegate?.selectScheduleScreen(self, didSelectedDays: self.selectedDays)
         navigationController?.popViewController(animated: true)
     }
 }
 
-// MARK: - UITableViewDelegate, UITableViewDataSource
+// MARK: - UITableViewDataSource
 
-extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
+extension ScheduleViewController : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return daysOfWeek.count
     }
@@ -118,9 +161,7 @@ extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension ScheduleViewController: WeekDaySender {
     func weekDayAppend(_ weekDay: Weekday) {
-        if !selectedDays.contains(weekDay) {
-            selectedDays.append(weekDay)
-        }
+        selectedDays.append(weekDay)
     }
     
     func weekDayRemove(_ weekDay: Weekday) {

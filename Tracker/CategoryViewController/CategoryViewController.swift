@@ -131,6 +131,14 @@ final class CategoryViewController: UIViewController, NewCategoryViewControllerD
         ])
     }
     
+    // MARK: - Actions
+    
+    @objc private func addCategory() {
+        let addNewCategoryVC = NewCategoryViewController()
+        addNewCategoryVC.delegate = self
+        navigationController?.pushViewController(addNewCategoryVC, animated: true)
+    }
+    
     func newCategoryScreen(_ screen: NewCategoryViewController, didAddCategoryWithTitle title: String) {
         viewModel.addCategory(title: title)
     }
@@ -148,14 +156,6 @@ final class CategoryViewController: UIViewController, NewCategoryViewControllerD
             stackView.isHidden = true
         }
     }
-    
-    // MARK: - Actions
-    
-    @objc private func addCategory() {
-        let addNewCategoryVC = NewCategoryViewController()
-        addNewCategoryVC.delegate = self
-        navigationController?.pushViewController(addNewCategoryVC, animated: true)
-    }
 }
 
 // MARK: - UITableViewDataSource
@@ -166,13 +166,10 @@ extension CategoryViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.reuseIdentifier, for: indexPath) as? CategoryTableViewCell {
-            let category = viewModel.category(at: indexPath.row)
-            cell.configure(with: category)
-            return cell
-        } else {
-            return UITableViewCell()
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.reuseIdentifier, for: indexPath) as! CategoryTableViewCell
+        let category = viewModel.category(at: indexPath.row)
+        cell.configure(with: category)
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
