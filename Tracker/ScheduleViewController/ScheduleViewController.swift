@@ -102,6 +102,9 @@ class ScheduleViewController: UIViewController {
         tableView.isScrollEnabled = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
+        // Устанавливаем headerView, чтобы убрать верхний сепаратор у первой ячейки
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 1))
+        
         view.addSubview(tableView)
         
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
@@ -141,9 +144,10 @@ class ScheduleViewController: UIViewController {
     }
 }
 
-// MARK: - UITableViewDataSource
+// MARK: - UITableViewDataSource & UITableViewDelegate
 
-extension ScheduleViewController : UITableViewDelegate, UITableViewDataSource {
+extension ScheduleViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return daysOfWeek.count
     }
@@ -155,6 +159,22 @@ extension ScheduleViewController : UITableViewDelegate, UITableViewDataSource {
         cell.configureCell(daysOfWeekUI[indexPath.row], daysOfWeek[indexPath.row])
         cell.delegate = self
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let totalRows = tableView.numberOfRows(inSection: indexPath.section)
+
+        if indexPath.row == 0 {
+          
+            tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 1))
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        } else if indexPath.row == totalRows - 1 {
+            
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: .greatestFiniteMagnitude)
+        } else {
+            
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        }
     }
 }
 

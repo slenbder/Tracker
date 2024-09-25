@@ -106,7 +106,7 @@ extension TrackerCategoryStore {
     }
     
     func addTrackerToCategory(tracker: Tracker, with titleCategory: String) {
-        let trackers = trackerStore.fetchTracker2()
+        let trackers = trackerStore.fetchRawTrackers()
         if let existingCategory = fetchCategory(with: titleCategory) {
             var existingTrackers = existingCategory.trackers?.allObjects as? [TrackerCoreData] ?? []
             if let trackerCoreData = trackers.first(where: { $0.id == tracker.id }) {

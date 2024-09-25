@@ -73,7 +73,7 @@ final class TrackerStore {
     }
   }
   
-  func fetchTracker2() -> [TrackerCoreData] {
+  func fetchRawTrackers() -> [TrackerCoreData] {
     guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return [] }
     let managedContext = appDelegate.persistentContainer.viewContext
     let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
@@ -82,14 +82,14 @@ final class TrackerStore {
   }
   
   func deleteTracker(tracker: Tracker) {
-    let targetTrackers = fetchTracker2()
+    let targetTrackers = fetchRawTrackers()
     if let index = targetTrackers.firstIndex(where: {$0.id == tracker.id}) {
       context.delete(targetTrackers[index])
     }
   }
   
   func updateTracker(tracker: Tracker) {
-    let targetTrackers = fetchTracker2()
+    let targetTrackers = fetchRawTrackers()
     if let index = targetTrackers.firstIndex(where: {$0.id == tracker.id}) {
       targetTrackers[index].title = tracker.title
       targetTrackers[index].color = UIColorMarshalling.hexString(from: tracker.color)
