@@ -123,7 +123,7 @@ final class CreateNewIrregularEventViewController: UIViewController {
     }
     
     private func setupCancelButton() {
-        cancelButton.setTitle("cancelButton", for: .normal)
+        cancelButton.setTitle(localizedString(key:"cancelButton"), for: .normal)
         cancelButton.layer.cornerRadius = 16
         cancelButton.layer.masksToBounds = true
         cancelButton.backgroundColor = .clear
@@ -139,7 +139,7 @@ final class CreateNewIrregularEventViewController: UIViewController {
     }
     
     private func setupCreateButton() {
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(localizedString(key:"addButton"), for: .normal)
         createButton.layer.cornerRadius = 16
         createButton.layer.masksToBounds = true
         createButton.isEnabled = false
