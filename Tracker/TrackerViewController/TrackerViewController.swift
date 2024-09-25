@@ -62,7 +62,7 @@ final class TrackerViewController: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        analyticsService.report(event: "open", params: ["screen": "Main"])
+        AnalyticsService.report(event: "open", params: ["screen": "Main"])
     }
     
     override func viewDidLoad() {
@@ -79,7 +79,7 @@ final class TrackerViewController: UIViewController{
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
-        analyticsService.report(event: "close", params: ["screen": "Main"])
+        AnalyticsService.report(event: "close", params: ["screen": "Main"])
     }
     
     // MARK: - Data Loading
@@ -308,7 +308,7 @@ final class TrackerViewController: UIViewController{
     
     @objc func plusButtonTapped() {
         print("PlusButtonTapped")
-        analyticsService.report(event: "click", params: ["screen": "Main", "item": "add_track"])
+        AnalyticsService.report(event: "click", params: ["screen": "Main", "item": "add_track"])
         let newTrackerVC = CreateTrackerViewController()
         newTrackerVC.habitDelegate = self
         newTrackerVC.eventDelegate = self
@@ -349,7 +349,7 @@ final class TrackerViewController: UIViewController{
     
     
     @objc private func filterButtonTap() {
-        analyticsService.report(event: "click", params: ["screen": "Main", "item": "filter"])
+        AnalyticsService.report(event: "click", params: ["screen": "Main", "item": "filter"])
         let filterViewController = FilterViewController()
         filterViewController.filterState = self.filterState
         filterViewController.filterDelegate = self
@@ -629,7 +629,7 @@ extension TrackerViewController: UICollectionViewDataSource {
     }
     
     private func editTracker(indexPath: IndexPath) {
-        analyticsService.report(event: "click", params: ["screen": "Main", "item": "edit"])
+        AnalyticsService.report(event: "click", params: ["screen": "Main", "item": "edit"])
         let trackerToEdit = visibleCategory[indexPath.section].trackers[indexPath.row]
         let habitViewController = NewHabitVC()
         habitViewController.trackerToEdit = trackerToEdit
@@ -642,7 +642,7 @@ extension TrackerViewController: UICollectionViewDataSource {
     
     
     private func deleteTracker(indexPath: IndexPath) {
-        analyticsService.report(event: "click", params: ["screen": "Main", "item": "delete"])
+        AnalyticsService.report(event: "click", params: ["screen": "Main", "item": "delete"])
         let actionSheet = UIAlertController(title: localizedString(key: "actionSheetTitle"), message: nil, preferredStyle: .actionSheet)
         
         let deleteAction = UIAlertAction(title: localizedString(key: "deleteButton"), style: .destructive) { _ in

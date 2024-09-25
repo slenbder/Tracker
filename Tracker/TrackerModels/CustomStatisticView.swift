@@ -57,7 +57,7 @@ final class CustomStatisticView: UIView {
         titleLabel.text = String(value)
     }
     
-    func setupView() {
+    private func setupView() {
         layer.cornerRadius = 15
         containerView.addSubviews(titleLabel, subLabel)
         clipsToBounds = true

@@ -110,7 +110,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     // MARK: - Actions
     
     @objc private func trackerDoneTapped() {
-        analyticsService.report(event: "click", params: ["screen": "Main", "item": "track"])
+        AnalyticsService.report(event: "click", params: ["screen": "Main", "item": "track"])
         guard let trackerID = trackerID,
               let indexPath = indexPath else {
             assertionFailure("no trackerID")

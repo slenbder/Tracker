@@ -68,7 +68,6 @@ final class StatisticsViewController: UIViewController {
             image.heightAnchor.constraint(equalToConstant: 80),
             image.widthAnchor.constraint(equalToConstant: 80)
         ])
-        statView.setupView()
     }
     
     
