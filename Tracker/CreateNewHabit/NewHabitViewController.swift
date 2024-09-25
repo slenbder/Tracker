@@ -162,6 +162,7 @@ class NewHabitVC: UIViewController {
         tableView.dataSource = self
         tableView.layer.cornerRadius = 16
         tableView.separatorStyle = .singleLine
+        tableView.separatorColor = .ypGray
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.rowHeight = 76
         tableView.backgroundColor = .ypBackground

@@ -31,7 +31,7 @@ class DaysValueTransformer: ValueTransformer {
     
     override func reverseTransformedValue(_ value: Any?) -> Any? {
         guard let data = value as? Data,
-              let strings = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [String] else { return nil }
+              let strings = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NSArray.self, NSString.self], from: data) as? [String] else { return nil }
         return strings.compactMap { Weekday(rawValue: $0) }
     }
 }

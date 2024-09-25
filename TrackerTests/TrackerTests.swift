@@ -13,11 +13,12 @@ final class TrackerTests: XCTestCase {
     
     func testTrackerViewController() {
         let vc = TrackerViewController()
-        assertSnapshot(matching: vc, as: .image)
+        assertSnapshot(of: vc, as: .image)
     }
     
     func testStatisticsViewController() {
         let vc = StatisticsViewController()
-        assertSnapshot(matching: vc, as: .image)
+        assertSnapshot(of: vc, as: .image)
     }
 }
+
