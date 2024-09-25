@@ -54,16 +54,23 @@ final class StatisticsViewController: UIViewController {
     private func setupAppearance() {
         view.backgroundColor = .ypWhite
         view.addSubviews(emptyHolderStackView, statView)
-        statView.frame = CGRect(x: 16, y: self.view.frame.midY - 45, width: self.view.frame.width - 32, height: 90)
-        statView.setupView()
+        statView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             emptyHolderStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyHolderStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            statView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            statView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            statView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            statView.heightAnchor.constraint(equalToConstant: 90),
+            
             image.heightAnchor.constraint(equalToConstant: 80),
             image.widthAnchor.constraint(equalToConstant: 80)
         ])
+        statView.setupView()
     }
+    
     
     private func updateStat() {
         completedTrackers = trackerRecordStore.fetchRecords()
