@@ -64,4 +64,3 @@ extension CategoryViewModel: TrackerCategoryStoreDelegate {
         loadCategories()
     }
 }
-

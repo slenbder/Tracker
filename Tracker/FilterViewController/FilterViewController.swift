@@ -33,39 +33,44 @@ protocol FilterDelegate: AnyObject {
 }
 
 final class FilterViewController: UIViewController {
-  
-  private let tableView = UITableView()
-  
-  weak var filterDelegate: FilterDelegate?
-  
-  var filterState: FilterCase = .all
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
-      title = localizedString(key: "filterTitle")
-    setupTableView()
-  }
-  
-  private func setupTableView() {
-    tableView.delegate = self
-    tableView.dataSource = self
-    tableView.layer.cornerRadius = 16
-    tableView.rowHeight = 75
-    tableView.isScrollEnabled = true
-    tableView.showsVerticalScrollIndicator = false
-    tableView.backgroundColor = .ypWhite
-    tableView.translatesAutoresizingMaskIntoConstraints = false
     
-    view.backgroundColor = .ypWhite
-    view.addSubview(tableView)
+    private let tableView = UITableView()
     
-    NSLayoutConstraint.activate([
-      tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-      tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-      tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-      tableView.heightAnchor.constraint(equalToConstant: CGFloat(FilterCase.allCases.count * 75))
-    ])
-  }
+    weak var filterDelegate: FilterDelegate?
+    
+    var filterState: FilterCase = .all
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = localizedString(key: "filterTitle")
+        setupTableView()
+    }
+    
+    private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.layer.cornerRadius = 16
+        tableView.rowHeight = 75
+        tableView.isScrollEnabled = true
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        tableView.showsVerticalScrollIndicator = false
+        tableView.backgroundColor = .ypWhite
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Добавьте эти строки
+        tableView.tableHeaderView = UIView(frame: .zero)
+        tableView.tableFooterView = UIView(frame: .zero)
+        
+        view.backgroundColor = .ypWhite
+        view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            tableView.heightAnchor.constraint(equalToConstant: CGFloat(FilterCase.allCases.count * 75))
+        ])
+    }
 }
 
 extension FilterViewController: UITableViewDelegate {
@@ -86,13 +91,21 @@ extension FilterViewController: UITableViewDataSource {
     FilterCase.allCases.count
   }
   
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-    let filterCase = FilterCase(rawValue: indexPath.row)!
-    cell.textLabel?.text = filterCase.title
-    cell.selectionStyle = .none
-    cell.accessoryType = filterCase == filterState ? .checkmark : .none
-    cell.backgroundColor = .ypBackground
-    return cell
-  }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+        let filterCase = FilterCase(rawValue: indexPath.row)!
+        cell.textLabel?.text = filterCase.title
+        cell.selectionStyle = .none
+        cell.accessoryType = filterCase == filterState ? .checkmark : .none
+        cell.backgroundColor = .ypBackground
+
+        // Если это последняя ячейка, скрываем ее сепаратор
+        if indexPath.row == FilterCase.allCases.count - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: .greatestFiniteMagnitude)
+        } else {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        }
+
+        return cell
+    }
 }
