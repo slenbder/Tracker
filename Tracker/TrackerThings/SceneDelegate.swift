@@ -25,26 +25,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
     }
     
-    func sceneDidDisconnect(_ scene: UIScene) {
-        // Этот метод вызывается, когда сцена отсоединяется от приложения
-        // Освободите любые ресурсы, которые могут быть связаны с этой сценой
-    }
+    func sceneDidDisconnect(_ scene: UIScene) {}
     
-    func sceneDidBecomeActive(_ scene: UIScene) {
-        // Восстановите активные задачи, приостановленные при переходе в фоновый режим или при отсутствии активной сцены
-    }
+    func sceneDidBecomeActive(_ scene: UIScene) {}
     
-    func sceneWillResignActive(_ scene: UIScene) {
-        // Приостанавливайте активные задачи, когда сцена переходит в состояние неактивности (например, при получении звонка)
-    }
+    func sceneWillResignActive(_ scene: UIScene) {}
     
-    func sceneWillEnterForeground(_ scene: UIScene) {
-        // Этот метод вызывается при возврате сцены на передний план, используйте его для обновления пользовательского интерфейса
-    }
+    func sceneWillEnterForeground(_ scene: UIScene) {}
     
     func sceneDidEnterBackground(_ scene: UIScene) {
-        // Этот метод вызывается при переходе сцены в фоновый режим
-        // Сохраняйте данные с помощью saveContext из AppDelegate при необходимости
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
 }

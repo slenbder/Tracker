@@ -117,6 +117,8 @@ final class CategoryViewController: UIViewController, NewCategoryViewControllerD
         tableView.layer.cornerRadius = 16
         tableView.rowHeight = 75
         tableView.isScrollEnabled = true
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = .ypGray
         tableView.showsVerticalScrollIndicator = false
         tableView.backgroundColor = .ypWhite
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -131,8 +133,24 @@ final class CategoryViewController: UIViewController, NewCategoryViewControllerD
         ])
     }
     
+    // MARK: - Actions
+    
+    @objc private func addCategory() {
+        let addNewCategoryVC = NewCategoryViewController()
+        addNewCategoryVC.delegate = self
+        navigationController?.pushViewController(addNewCategoryVC, animated: true)
+    }
+    
     func newCategoryScreen(_ screen: NewCategoryViewController, didAddCategoryWithTitle title: String) {
         viewModel.addCategory(title: title)
+        tableView.reloadData()
+        
+        DispatchQueue.main.async {
+            self.tableView.layoutIfNeeded()
+            let visibleRows = self.tableView.indexPathsForVisibleRows ?? []
+            self.tableView.reloadRows(at: visibleRows, with: .none)
+        }
+        mainScreenContent()
     }
     
     private func loadCategories() {
@@ -148,14 +166,6 @@ final class CategoryViewController: UIViewController, NewCategoryViewControllerD
             stackView.isHidden = true
         }
     }
-    
-    // MARK: - Actions
-    
-    @objc private func addCategory() {
-        let addNewCategoryVC = NewCategoryViewController()
-        addNewCategoryVC.delegate = self
-        navigationController?.pushViewController(addNewCategoryVC, animated: true)
-    }
 }
 
 // MARK: - UITableViewDataSource
@@ -166,14 +176,53 @@ extension CategoryViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.reuseIdentifier, for: indexPath) as? CategoryTableViewCell {
-            let category = viewModel.category(at: indexPath.row)
-            cell.configure(with: category)
-            return cell
-        } else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoryTableViewCell.reuseIdentifier, for: indexPath) as? CategoryTableViewCell else {
             return UITableViewCell()
         }
+        
+        let category = viewModel.category(at: indexPath.row)
+        cell.configure(with: category)
+        
+        cell.layer.cornerRadius = 0
+        cell.layer.maskedCorners = []
+        
+        let totalRows = viewModel.numberOfCategories()
+        let cornerRadius: CGFloat = 16
+        
+        if totalRows == 1 {
+            cell.layer.cornerRadius = cornerRadius
+            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        } else if indexPath.row == 0 {
+            cell.layer.cornerRadius = cornerRadius
+            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        } else if indexPath.row == totalRows - 1 {
+            cell.layer.cornerRadius = cornerRadius
+            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        }
+        
+        if indexPath.row == totalRows - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        } else {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        }
+        
+        cell.layer.masksToBounds = true
+        
+        return cell
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let totalRows = viewModel.numberOfCategories()
+        
+        if indexPath.row == totalRows - 1 {
+            
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        } else {
+            
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        }
+    }
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.selectCategory(at: indexPath.row)

@@ -48,6 +48,20 @@ final class TrackerRecordStore {
         }
     }
     
+    func deleteAllRecordFor(tracker: Tracker) {
+        let fetchRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
+        fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        do {
+            let records = try context.fetch(fetchRequest)
+            for recordToDelete in records {
+                context.delete(recordToDelete)
+            }
+            try context.save()
+        } catch {
+            print("Error deleting records: \(error.localizedDescription)")
+        }
+    }
+    
     func deleteRecord(for trackerRecord: TrackerRecorder) {
         let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@ AND date == %@", trackerRecord.id as CVarArg, trackerRecord.date as CVarArg)
@@ -64,4 +78,25 @@ final class TrackerRecordStore {
             print("Failed to delete record: \(error)")
         }
     }
+    
+    func fetchRecords() -> [TrackerRecorder] {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return [] }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
+        
+        do {
+            let trackerRecordCoreDataArray = try managedContext.fetch(fetchRequest)
+            let trackerRecords = trackerRecordCoreDataArray.map { trackerRecordCoreData in
+                return TrackerRecorder(
+                    id: trackerRecordCoreData.id ?? UUID(),
+                    date: trackerRecordCoreData.date ?? Date()
+                )
+            }
+            return trackerRecords
+        } catch {
+            print("Failed to fetch records: \(error.localizedDescription)")
+            return []
+        }
+    }
+    
 }

@@ -1,0 +1,20 @@
+# CocoaPods
+Pods/
+Podfile.lock
+*.xcworkspace
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.pbxuser
+*.xcscmblueprint
+
+# macOS-specific files
+.DS_Store
+
+Constants.swift
+
+# Ignore snapshot test reference images
+**/__Snapshots__/
+

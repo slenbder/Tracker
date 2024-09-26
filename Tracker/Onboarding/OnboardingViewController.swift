@@ -29,8 +29,8 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
     // MARK: - Private Methods
     
     private func setupPages() {
-        let page1 = OnboardingPageViewController(imageName: "onboardingBlue", text: "Отслеживайте только то, что хотите")
-        let page2 = OnboardingPageViewController(imageName: "onboardingRed", text: "Даже если это не литры воды и йога")
+        let page1 = OnboardingPageViewController(imageName: "onboardingBlue", text: localizedString(key:"onboardScreen1"))
+        let page2 = OnboardingPageViewController(imageName: "onboardingRed", text: localizedString(key:"onboardScreen2"))
         pages = [page1, page2]
     }
     
