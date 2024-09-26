@@ -5,12 +5,12 @@
 //  Created by Кирилл Марьясов on 22.09.2024.
 //
 
-import Foundation
+import UIKit
 import YandexMobileMetrica
 
 struct AnalyticsService {
     static func activate() {
-        let configuration = YMMYandexMetricaConfiguration(apiKey: "39d2758b-ad7d-45a6-95be-f298354aeb4e")
+        let configuration = YMMYandexMetricaConfiguration(apiKey: Constants.YMMAPIKey)
         guard let validConfiguration = configuration else {
             print("Failed to create YMMYandexMetricaConfiguration")
             return
@@ -21,7 +21,8 @@ struct AnalyticsService {
     
     static func report(event: String, params: [AnyHashable: Any]) {
         YMMYandexMetrica.reportEvent(event, parameters: params, onFailure: { error in
-            print("REPORT ERROR: %@", error.localizedDescription)
+            print("REPORT ERROR: \(error.localizedDescription)")
         })
     }
 }
+

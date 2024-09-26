@@ -45,6 +45,8 @@
 		4FB23FA12CA324A500C5DF0D /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB23FA02CA324A300C5DF0D /* FilterViewController.swift */; };
 		4FDF8E872C304D2E00897652 /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF8E862C304D2E00897652 /* YS Display-Medium.ttf */; };
 		4FDF8E892C304F2E00897652 /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF8E882C304F2E00897652 /* YS Display-Bold.ttf */; };
+		4FE231912CA55D1A004D1E49 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE231902CA5522A004D1E49 /* Constants.swift */; };
+		4FE231932CA55E27004D1E49 /* Constants.template.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE231922CA55E23004D1E49 /* Constants.template.swift */; };
 		4FE37B072C2EFDC70080C748 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE37B062C2EFDC70080C748 /* AppDelegate.swift */; };
 		4FE37B092C2EFDC70080C748 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE37B082C2EFDC70080C748 /* SceneDelegate.swift */; };
 		4FE37B102C2EFDC80080C748 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FE37B0F2C2EFDC80080C748 /* Assets.xcassets */; };
@@ -115,6 +117,8 @@
 		4FB23FA02CA324A300C5DF0D /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		4FDF8E862C304D2E00897652 /* YS Display-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Medium.ttf"; sourceTree = "<group>"; };
 		4FDF8E882C304F2E00897652 /* YS Display-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Bold.ttf"; sourceTree = "<group>"; };
+		4FE231902CA5522A004D1E49 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		4FE231922CA55E23004D1E49 /* Constants.template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.template.swift; sourceTree = "<group>"; };
 		4FE37B032C2EFDC70080C748 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FE37B062C2EFDC70080C748 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4FE37B082C2EFDC70080C748 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -329,6 +333,8 @@
 		4FCA65BA2C8364DA009DCCB8 /* TrackerThings */ = {
 			isa = PBXGroup;
 			children = (
+				4FE231922CA55E23004D1E49 /* Constants.template.swift */,
+				4FE231902CA5522A004D1E49 /* Constants.swift */,
 				4FE37B062C2EFDC70080C748 /* AppDelegate.swift */,
 				4FE37B082C2EFDC70080C748 /* SceneDelegate.swift */,
 				4FE37B0F2C2EFDC80080C748 /* Assets.xcassets */,
@@ -603,6 +609,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F677A0F2C9AFC330089A340 /* CategoryViewModel.swift in Sources */,
+				4FE231912CA55D1A004D1E49 /* Constants.swift in Sources */,
 				4F7261562C4804F5004594B6 /* CreateNewTrackerViewController.swift in Sources */,
 				4F8079842CA06B2B0002F3CA /* TrackerTextLable.swift in Sources */,
 				4F4D4C0C2C90B0E900FF7A71 /* NewCategoryViewController.swift in Sources */,
@@ -619,6 +626,7 @@
 				4F2D89CA2C91B92000E6464B /* Tracker.xcdatamodeld in Sources */,
 				4F72616B2C482FA8004594B6 /* TabBarViewController.swift in Sources */,
 				4F76479D2C82FD6800E77313 /* UIColorMarshalling.swift in Sources */,
+				4FE231932CA55E27004D1E49 /* Constants.template.swift in Sources */,
 				4F677A0D2C9AFB910089A340 /* OnboardingViewController.swift in Sources */,
 				4F72615E2C480559004594B6 /* StatsViewController.swift in Sources */,
 				4FB23FA12CA324A500C5DF0D /* FilterViewController.swift in Sources */,

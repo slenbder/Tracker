@@ -559,37 +559,39 @@ extension TrackerViewController: UICollectionViewDataSource {
         
         let indexPath = indexPaths[0]
         
-        let config = UIContextMenuConfiguration(actionProvider:  { _ in
+        let config = UIContextMenuConfiguration(actionProvider: { [weak self] _ in
+            guard let self = self else { return nil }
             
-            let pin = UIAction(title: localizedString(key:"pin"),
-                               image: UIImage.init(systemName: "pin")) { _ in
-                self.pinTracker(indexPath: indexPath)
+            let pin = UIAction(title: localizedString(key: "pin"),
+                               image: UIImage(systemName: "pin")) { [weak self] _ in
+                self?.pinTracker(indexPath: indexPath)
             }
             
-            let unpin = UIAction(title: localizedString(key:"unpin"),
-                                 image: UIImage.init(systemName: "pin.slash")) { _ in
-                self.unpinTracker(indexPath: indexPath)
+            let unpin = UIAction(title: localizedString(key: "unpin"),
+                                 image: UIImage(systemName: "pin.slash")) { [weak self] _ in
+                self?.unpinTracker(indexPath: indexPath)
             }
             
-            let edit = UIAction(title: localizedString(key:"edit"),
-                                image: UIImage.init(systemName: "pencil")) { _ in
-                self.editTracker(indexPath: indexPath)
+            let edit = UIAction(title: localizedString(key: "edit"),
+                                image: UIImage(systemName: "pencil")) { [weak self] _ in
+                self?.editTracker(indexPath: indexPath)
             }
             
-            let delete = UIAction(title: localizedString(key:"delete"),
-                                  image: UIImage.init(systemName: "trash"),
-                                  attributes: .destructive) { _ in
-                self.deleteTracker(indexPath: indexPath)
+            let delete = UIAction(title: localizedString(key: "delete"),
+                                  image: UIImage(systemName: "trash"),
+                                  attributes: .destructive) { [weak self] _ in
+                self?.deleteTracker(indexPath: indexPath)
             }
             
             if self.visibleCategory[indexPath.section].title == "Закрепленные" {
-                return UIMenu(options: UIMenu.Options.displayInline, children: [unpin, edit, delete])
+                return UIMenu(options: .displayInline, children: [unpin, edit, delete])
             } else {
-                return UIMenu(options: UIMenu.Options.displayInline, children: [pin, edit, delete])
+                return UIMenu(options: .displayInline, children: [pin, edit, delete])
             }
         })
         return config
     }
+
     
     private func pinTracker(indexPath: IndexPath) {
         let tracker = visibleCategory[indexPath.section].trackers[indexPath.row]
@@ -645,21 +647,24 @@ extension TrackerViewController: UICollectionViewDataSource {
         AnalyticsService.report(event: "click", params: ["screen": "Main", "item": "delete"])
         let actionSheet = UIAlertController(title: localizedString(key: "actionSheetTitle"), message: nil, preferredStyle: .actionSheet)
         
-        let deleteAction = UIAlertAction(title: localizedString(key: "deleteButton"), style: .destructive) { _ in
+        let deleteAction = UIAlertAction(title: localizedString(key: "deleteButton"), style: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            
             let trackerForDelete = self.visibleCategory[indexPath.section].trackers[indexPath.row]
+            let shouldDeleteSection: Bool = self.visibleCategory[indexPath.section].trackers.count == 1
             
             self.trackerStore.deleteTracker(tracker: trackerForDelete)
             self.trackerRecordStore.deleteAllRecordFor(tracker: trackerForDelete)
-            
             self.updateVisibleCategoryAfterDeletion(tracker: trackerForDelete, at: indexPath)
             
             self.collectionView.performBatchUpdates({
-                self.collectionView.deleteItems(at: [indexPath])
-                if self.visibleCategory.isEmpty || self.visibleCategory[indexPath.section].trackers.isEmpty {
+                if shouldDeleteSection {
                     self.collectionView.deleteSections(IndexSet(integer: indexPath.section))
+                } else {
+                    self.collectionView.deleteItems(at: [indexPath])
                 }
-            }, completion: { _ in
-                self.reloadHolders()
+            }, completion: { [weak self] _ in
+                self?.reloadHolders()
             })
         }
         
@@ -668,6 +673,8 @@ extension TrackerViewController: UICollectionViewDataSource {
         actionSheet.addAction(cancelAction)
         self.present(actionSheet, animated: true, completion: nil)
     }
+
+
     
     private func updateVisibleCategoryAfterDeletion(tracker: Tracker, at indexPath: IndexPath) {
         let oldCategory = visibleCategory[indexPath.section]

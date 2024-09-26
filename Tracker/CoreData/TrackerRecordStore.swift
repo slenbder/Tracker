@@ -83,13 +83,20 @@ final class TrackerRecordStore {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return [] }
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-        let trackerRecordCoreDataArray = try! managedContext.fetch(fetchRequest)
-        let trackerRecords = trackerRecordCoreDataArray.map { trackerRecordCoreData in
-            return TrackerRecorder(
-                id: trackerRecordCoreData.id ?? UUID(),
-                date: trackerRecordCoreData.date ?? Date()
-            )
+        
+        do {
+            let trackerRecordCoreDataArray = try managedContext.fetch(fetchRequest)
+            let trackerRecords = trackerRecordCoreDataArray.map { trackerRecordCoreData in
+                return TrackerRecorder(
+                    id: trackerRecordCoreData.id ?? UUID(),
+                    date: trackerRecordCoreData.date ?? Date()
+                )
+            }
+            return trackerRecords
+        } catch {
+            print("Failed to fetch records: \(error.localizedDescription)")
+            return []
         }
-        return trackerRecords
     }
+    
 }

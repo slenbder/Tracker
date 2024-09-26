@@ -153,10 +153,6 @@ final class CategoryViewController: UIViewController, NewCategoryViewControllerD
         mainScreenContent()
     }
     
-    
-    
-    
-    
     private func loadCategories() {
         viewModel.loadCategories()
     }

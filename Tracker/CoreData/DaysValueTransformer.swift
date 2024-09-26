@@ -20,7 +20,7 @@ class DaysValueTransformer: ValueTransformer {
     }
     
     override class func allowsReverseTransformation() -> Bool {
-        return true
+        true
     }
     
     override func transformedValue(_ value: Any?) -> Any? {

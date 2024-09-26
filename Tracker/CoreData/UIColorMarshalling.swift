@@ -5,7 +5,6 @@
 //  Created by Кирилл Марьясов on 31.08.2024.
 //
 
-import Foundation
 import UIKit
 
 // MARK: - UIColorMarshalling
