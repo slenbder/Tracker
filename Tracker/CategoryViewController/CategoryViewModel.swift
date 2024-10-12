@@ -32,7 +32,9 @@ final class CategoryViewModel {
     // MARK: - Public Methods
     
     func loadCategories() {
-        categories = trackerCategoryStore.fetchAllCategories()
+        categories = trackerCategoryStore.fetchAllCategories().compactMap {
+            trackerCategoryStore.decodingCategory(from: $0)
+        }
     }
     
     func addCategory(title: String) {
@@ -62,4 +64,3 @@ extension CategoryViewModel: TrackerCategoryStoreDelegate {
         loadCategories()
     }
 }
-

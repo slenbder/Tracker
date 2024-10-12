@@ -67,6 +67,7 @@ final class CreateNewIrregularEventViewController: UIViewController {
         createTable()
         setupConstraint()
         setupScrollView()
+        setupDismissKeyboardGesture()
     }
     
     // MARK: - Setup UI
@@ -122,7 +123,7 @@ final class CreateNewIrregularEventViewController: UIViewController {
     }
     
     private func setupCancelButton() {
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(localizedString(key:"cancelButton"), for: .normal)
         cancelButton.layer.cornerRadius = 16
         cancelButton.layer.masksToBounds = true
         cancelButton.backgroundColor = .clear
@@ -138,7 +139,7 @@ final class CreateNewIrregularEventViewController: UIViewController {
     }
     
     private func setupCreateButton() {
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(localizedString(key:"addButton"), for: .normal)
         createButton.layer.cornerRadius = 16
         createButton.layer.masksToBounds = true
         createButton.isEnabled = false
@@ -242,6 +243,12 @@ final class CreateNewIrregularEventViewController: UIViewController {
         ])
     }
     
+    private func setupDismissKeyboardGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
     // MARK: - Helper Methods
     
     private func calculateCollectionViewHeight(for itemCount: Int, itemsPerRow: Int, itemHeight: CGFloat) -> CGFloat {
@@ -254,6 +261,7 @@ final class CreateNewIrregularEventViewController: UIViewController {
         tableView.dataSource = self
         tableView.layer.cornerRadius = 16
         tableView.separatorStyle = .singleLine
+        tableView.separatorColor = .ypGray
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.rowHeight = 76
         tableView.backgroundColor = .ypBackground
@@ -294,12 +302,18 @@ final class CreateNewIrregularEventViewController: UIViewController {
                                             Weekday.thursday,
                                             Weekday.friday,
                                             Weekday.saturday,
-                                            Weekday.sunday])
+                                            Weekday.sunday],
+                                 trackerCategory: selectedCategory?.title ?? "")
         
         self.trackerVC.createNewTracker(tracker: newTracker)
         self.delegate?.didCreateNewEvent(newTracker, selectedCategory?.title ?? "")
         self.dismiss(animated: true)
     }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -397,12 +411,10 @@ extension CreateNewIrregularEventViewController: UICollectionViewDataSource, UIC
 extension CreateNewIrregularEventViewController: UITextFieldDelegate {
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if textField.text != "" {
-            return true
-        } else {
+        if textField.text?.isEmpty == true {
             textField.placeholder = "Название не может быть пустым"
-            return false
         }
+        return true
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

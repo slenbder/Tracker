@@ -71,6 +71,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    private let analyticsService = AnalyticsService()
+    
     weak var delegate: TrackerDoneDelegate?
     private var isCompletedToday: Bool  = false
     private var trackerID: UUID?
@@ -96,7 +98,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         self.isCompletedToday = isCompletedToday
         titleLabel.text = tracker.title
         emojiLabel.text = tracker.emoji
-        dayCounterLabel.text = "\(completedDays) дней"
+        dayCounterLabel.text = String.localizedStringWithFormat(localizedString(key:"numberOfDay"), completedDays)
         
         bodyView.backgroundColor = tracker.color
         plusButton.tintColor = tracker.color
@@ -108,6 +110,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     // MARK: - Actions
     
     @objc private func trackerDoneTapped() {
+        AnalyticsService.report(event: "click", params: ["screen": "Main", "item": "track"])
         guard let trackerID = trackerID,
               let indexPath = indexPath else {
             assertionFailure("no trackerID")
@@ -123,12 +126,9 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Layout
     
-    func addSubviews(_ views: UIView...) {
-        views.forEach({addSubview($0)})
-    }
-    
     private func setupAppearance() {
-        addSubviews(bodyView, emojiView, emojiLabel, titleLabel, dayCounterLabel, plusButton)
+        bodyView.addSubviews(emojiView,emojiLabel,titleLabel)
+        addSubviews(bodyView,dayCounterLabel,plusButton)
         NSLayoutConstraint.activate([
             bodyView.heightAnchor.constraint(equalToConstant: 90),
             bodyView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -156,5 +156,11 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
             plusButton.topAnchor.constraint(equalTo: bodyView.bottomAnchor, constant: 8)
         ])
+    }
+}
+
+extension UIView {
+    func addSubviews(_ views: UIView...) {
+        views.forEach({addSubview($0)})
     }
 }

@@ -23,11 +23,12 @@ class NewHabitVC: UIViewController {
     weak var dismissDelegate: DismissProtocol?
     var trackerVC = TrackerViewController()
     
-    private var selectedCategory: TrackerCategory?
-    private var selectedSchedule: [Weekday] = []
-    private var enteredEventName = ""
-    private var selectedEmoji: String?
-    private var selectedColor: UIColor?
+    var selectedCategory: TrackerCategory?
+    var selectedSchedule: [Weekday] = []
+    var enteredEventName = ""
+    var selectedEmoji: String?
+    var selectedColor: UIColor?
+    var trackerToEdit: Tracker?
     
     let tableView = UITableView()
     let createButton = UIButton()
@@ -56,7 +57,18 @@ class NewHabitVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Новая привычка"
+        
+        if let trackerToEdit = trackerToEdit {
+            enteredEventName = trackerToEdit.title
+            selectedColor = trackerToEdit.color
+            selectedEmoji = trackerToEdit.emoji
+            selectedSchedule = trackerToEdit.schedule
+            selectedCategory = TrackerCategory(title: trackerToEdit.trackerCategory, trackers: [])
+            title = "Редактирование привычки"
+        } else {
+            title = "Новая привычка"
+        }
+        
         backGround()
         setupScrollView()
         setupHabitView()
@@ -66,6 +78,7 @@ class NewHabitVC: UIViewController {
         setupCreateButton()
         createTable()
         setupConstraint()
+        setupDismissKeyboardGesture()
     }
     
     // MARK: - Setup UI
@@ -113,7 +126,7 @@ class NewHabitVC: UIViewController {
     }
     
     private func setupCancelButton() {
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(localizedString(key:"cancelButton"), for: .normal)
         cancelButton.layer.cornerRadius = 16
         cancelButton.layer.masksToBounds = true
         cancelButton.backgroundColor = .clear
@@ -129,7 +142,9 @@ class NewHabitVC: UIViewController {
     }
     
     private func setupCreateButton() {
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(
+            trackerToEdit == nil ? localizedString(key:"addButton") : localizedString(key: "editButton"), for: .normal
+        )
         createButton.layer.cornerRadius = 16
         createButton.layer.masksToBounds = true
         createButton.backgroundColor = .ypGray
@@ -148,6 +163,7 @@ class NewHabitVC: UIViewController {
         tableView.dataSource = self
         tableView.layer.cornerRadius = 16
         tableView.separatorStyle = .singleLine
+        tableView.separatorColor = .ypGray
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.rowHeight = 76
         tableView.backgroundColor = .ypBackground
@@ -247,6 +263,12 @@ class NewHabitVC: UIViewController {
         ])
     }
     
+    private func setupDismissKeyboardGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
     // MARK: - Helper Methods
     
     private func calculateCollectionViewHeight(for itemCount: Int, itemsPerRow: Int, itemHeight: CGFloat) -> CGFloat {
@@ -275,16 +297,34 @@ class NewHabitVC: UIViewController {
     
     @objc func create() {
         print("Create")
-        let newTracker = Tracker(id: UUID(),
-                                 title: enteredEventName,
-                                 color: selectedColor ?? .cSelection1,
-                                 emoji: selectedEmoji ?? "🤔",
-                                 schedule: selectedSchedule)
-        
-        self.trackerVC.createNewTracker(tracker: newTracker)
-        self.delegate?.didCreateNewHabit(newTracker, selectedCategory?.title ?? "")
-        self.dismiss(animated: true)
+        if let trackerToEdit = trackerToEdit {
+            let updatedTracker = Tracker(id: trackerToEdit.id,
+                                         title: enteredEventName,
+                                         color: selectedColor ?? .cSelection1,
+                                         emoji: selectedEmoji ?? "🤔",
+                                         schedule: selectedSchedule,
+                                         trackerCategory: selectedCategory?.title ?? "")
+            
+            self.trackerVC.updateTracker(tracker: updatedTracker)
+            self.dismiss(animated: true)
+        } else {
+            let newTracker = Tracker(id: UUID(),
+                                     title: enteredEventName,
+                                     color: selectedColor ?? .cSelection1,
+                                     emoji: selectedEmoji ?? "🤔",
+                                     schedule: selectedSchedule,
+                                     trackerCategory: selectedCategory?.title ?? "")
+            
+            self.trackerVC.createNewTracker(tracker: newTracker)
+            self.delegate?.didCreateNewHabit(newTracker, selectedCategory?.title ?? "")
+            self.dismiss(animated: true)
+        }
     }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -304,7 +344,7 @@ extension NewHabitVC : UITableViewDelegate, UITableViewDataSource {
         if item == "Категория" {
             cell.detailTextLabel?.text = selectedCategory?.title
             cell.detailTextLabel?.textColor = .ypGray
-            cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .medium)
+            cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         }
         if item == "Расписание" {
             var text : [String] = []
@@ -313,7 +353,7 @@ extension NewHabitVC : UITableViewDelegate, UITableViewDataSource {
             }
             cell.detailTextLabel?.text = text.joined(separator: ", ")
             cell.detailTextLabel?.textColor = .ypGray
-            cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .medium)
+            cell.detailTextLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         }
         
         return cell
@@ -344,12 +384,10 @@ extension NewHabitVC : UITableViewDelegate, UITableViewDataSource {
 extension NewHabitVC: UITextFieldDelegate {
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if textField.text != "" {
-            return true
-        } else {
+        if textField.text?.isEmpty == true {
             textField.placeholder = "Название не может быть пустым"
-            return false
         }
+        return true
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -365,6 +403,7 @@ extension NewHabitVC: UITextFieldDelegate {
         return true
     }
 }
+
 
 // MARK: - CategoryViewControllerDelegate
 
